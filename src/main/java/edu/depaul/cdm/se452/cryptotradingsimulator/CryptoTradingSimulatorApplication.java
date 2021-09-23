@@ -10,21 +10,32 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class CryptoTradingSimulatorApplication {
-	private static final Logger log = LoggerFactory.getLogger(CryptoTradingSimulatorApplication.class);
+    private static final Logger log = LoggerFactory.getLogger(CryptoTradingSimulatorApplication.class);
 
-	@Value("${app.greeting}")
-	private String greeting;
+    @Value("${app.greeting}")
+    private String greeting;
 
-	@Bean
-	public CommandLineRunner printHello() {
-		return (args) -> {
-			log.info("Hello world");
-			log.info(greeting);
-		};
-	}
+    @Bean
+    public CommandLineRunner printEnvironmentVariable() {
+        log.info("--- printEnvironmentVariable ---");
+        return (args) -> {
+            log.info("Hello world");
+            log.info(greeting);
+            log.info("---");
+        };
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(CryptoTradingSimulatorApplication.class, args);
-	}
+    @Bean
+    public CommandLineRunner printLombokPortfolio() {
+        log.info("--- printLombokPortfolio ---");
+        return (args) -> {
+            log.info(String.valueOf(new Portfolio()));
+            log.info("---");
+        };
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(CryptoTradingSimulatorApplication.class, args);
+    }
 
 }
