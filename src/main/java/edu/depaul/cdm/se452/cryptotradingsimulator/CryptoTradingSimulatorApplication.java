@@ -34,8 +34,16 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
+    @Bean
+    public CommandLineRunner printPortfolios(PortfolioRepository repository) {
+        log.info("--- printPortfolios ---");
+        return (args) -> {
+            log.info(String.valueOf(repository.findAll()));
+            log.info("---");
+        };
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(CryptoTradingSimulatorApplication.class, args);
     }
-
 }
