@@ -15,8 +15,9 @@ public class Portfolio {
     @GeneratedValue
     private long id;
 
-    @Column(name = "start_date")
     private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     private Double balance;
 }

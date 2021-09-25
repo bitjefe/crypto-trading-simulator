@@ -7,5 +7,6 @@ CREATE TABLE portfolio (
     PRIMARY KEY (ID),
 
   balance DECIMAL(10,2),
-  start_date TIMESTAMP WITH TIME ZONE
+  start_date TIMESTAMP WITH TIME ZONE,
+  end_date TIMESTAMP WITH TIME ZONE
 );
