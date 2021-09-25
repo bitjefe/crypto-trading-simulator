@@ -10,3 +10,8 @@ CREATE TABLE portfolio (
   start_date TIMESTAMP WITH TIME ZONE,
   end_date TIMESTAMP WITH TIME ZONE
 );
+
+CREATE TABLE crypto_transaction (
+                             id INT AUTO_INCREMENT PRIMARY KEY,
+                             portfolio_id INT
+);

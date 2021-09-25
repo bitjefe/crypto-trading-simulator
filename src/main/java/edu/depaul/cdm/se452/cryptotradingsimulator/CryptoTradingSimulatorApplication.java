@@ -39,6 +39,7 @@ public class CryptoTradingSimulatorApplication {
         log.info("--- printPortfolios ---");
         return (args) -> {
             log.info(String.valueOf(repository.findAll()));
+            log.info(String.valueOf(repository.findById(1L).get().getCryptoTransactions()));
             log.info("---");
         };
     }

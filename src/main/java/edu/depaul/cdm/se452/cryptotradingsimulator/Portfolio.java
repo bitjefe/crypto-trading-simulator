@@ -1,12 +1,11 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import lombok.Data;
+import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,4 +19,8 @@ public class Portfolio {
     private LocalDateTime endDate;
 
     private Double balance;
+
+    @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private List<CryptoTransaction> cryptoTransactions;
 }
