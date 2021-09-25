@@ -6,10 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.math.BigDecimal;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -19,7 +16,7 @@ public class Portfolio {
     private long id;
 
     @Column(name = "start_date")
-    private OffsetDateTime startDate;
+    private LocalDateTime startDate;
 
     private Double balance;
 }
