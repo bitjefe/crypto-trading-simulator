@@ -19,6 +19,9 @@ CREATE TABLE crypto_transaction (
                              id INT AUTO_INCREMENT PRIMARY KEY,
                              portfolio_id INT,
                              cryptocurrency_ticker VARCHAR(6),
+                             quantity DECIMAL(10, 5),
+                             transaction_amount DECIMAL(10, 2),
+                             is_purchase BOOLEAN,
     FOREIGN KEY (cryptocurrency_ticker) REFERENCES cryptocurrency(ticker),
     FOREIGN KEY (portfolio_id) REFERENCES portfolio(id)
 );

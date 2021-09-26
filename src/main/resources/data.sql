@@ -9,4 +9,4 @@ insert into cryptocurrency values ('BTC'),
                                   ('BCH'),
                                   ('DOGE');
 
-insert into crypto_transaction values (null, 1, 'BTC');
+insert into crypto_transaction values (null, 1, 'BTC', 1.00, 5637.00, true);

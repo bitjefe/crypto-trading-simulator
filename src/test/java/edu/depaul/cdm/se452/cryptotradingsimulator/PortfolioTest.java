@@ -19,9 +19,6 @@ public class PortfolioTest {
     @Autowired
     private PortfolioRepository repository;
 
-    @Autowired
-    private CryptoTransactionRepository cryptoTransactionRepository;
-
     private Portfolio createTestRecord(Double expectedBalance, LocalDateTime expectedStartDate) {
         Portfolio newRecord = new Portfolio();
         newRecord.setBalance(expectedBalance);

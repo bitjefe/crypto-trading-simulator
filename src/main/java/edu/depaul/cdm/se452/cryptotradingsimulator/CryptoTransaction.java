@@ -16,4 +16,10 @@ public class CryptoTransaction {
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
+
+    private Double quantity;
+
+    private Double transactionAmount;
+
+    private Boolean isPurchase;
 }
