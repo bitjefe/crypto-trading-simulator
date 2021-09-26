@@ -11,7 +11,7 @@ public class CryptoTransaction {
     @GeneratedValue
     private long id;
 
-//    private long cryptocurrencyId;
+    private String cryptocurrencyTicker;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
