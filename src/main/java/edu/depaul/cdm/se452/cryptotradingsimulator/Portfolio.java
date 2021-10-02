@@ -55,13 +55,11 @@ public class Portfolio {
     }
 
     public Double getProfitLoss(TradingEngineService tradingService) {
-        Double currentHoldingNetWorth = getCurrentHoldingNetWorth(tradingService);
-        Double currentPortfolioValue = getCurrentPortfolioValue(currentHoldingNetWorth);
-        return currentPortfolioValue - this.startingBalance;
+        return getCurrentPortfolioValue(tradingService) - this.startingBalance;
     }
 
-    private double getCurrentPortfolioValue(Double currentHoldingNetWorth) {
-        return this.balance + currentHoldingNetWorth;
+    private Double getCurrentPortfolioValue(TradingEngineService tradingService) {
+        return this.balance + getCurrentHoldingNetWorth(tradingService);
     }
 
     private Double getCurrentHoldingNetWorth(TradingEngineService tradingService) {
