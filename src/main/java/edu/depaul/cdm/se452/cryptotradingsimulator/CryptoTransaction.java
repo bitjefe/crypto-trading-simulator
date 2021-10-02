@@ -19,7 +19,13 @@ public class CryptoTransaction {
 
     private Double quantity;
 
-    private Double transactionAmount;
+    private Double pricePerCoin;
 
     private Boolean isPurchase;
+
+    public void process() {
+        Double transactionPrice = this.pricePerCoin * this.quantity;
+        transactionPrice = this.isPurchase ? (transactionPrice * -1.0) : transactionPrice;
+        this.portfolio.adjustBalance(transactionPrice);
+    }
 }

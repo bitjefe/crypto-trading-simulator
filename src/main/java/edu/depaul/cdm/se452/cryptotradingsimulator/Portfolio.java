@@ -24,4 +24,8 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<CryptoTransaction> cryptoTransactions;
+
+    public void adjustBalance(Double transactionPrice) {
+        this.balance = this.balance + transactionPrice;
+    }
 }

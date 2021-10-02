@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.offset;
 
 @DataJpaTest
 public class PortfolioTest {
@@ -47,10 +48,15 @@ public class PortfolioTest {
 
         CryptoTransaction transaction = new CryptoTransaction();
         transaction.setCryptocurrencyTicker("DOGE");
+        transaction.setQuantity(2.0);
+        transaction.setIsPurchase(true);
+        transaction.setPricePerCoin(3.0);
         transaction.setPortfolio(newRecord);
+        transaction.process();
 
         entityManager.persistAndFlush(transaction);
         entityManager.refresh(newRecord);
         assertThat(newRecord.getCryptoTransactions().size()).isGreaterThan(0);
+        assertThat(newRecord.getBalance()).isCloseTo(94.0, offset(0.1));
     }
 }
