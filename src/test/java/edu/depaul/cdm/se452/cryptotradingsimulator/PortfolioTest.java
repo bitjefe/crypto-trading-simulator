@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.offset;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 public class PortfolioTest {
@@ -29,7 +30,7 @@ public class PortfolioTest {
         return newRecord;
     }
 
-    private void createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, String ticker, Double quantity, Boolean isPurchase) {
+    private void createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, String ticker, Double quantity, Boolean isPurchase) throws IllegalTransactionException {
         CryptoTransaction transaction = new CryptoTransaction();
         transaction.setCryptocurrencyTicker(ticker);
         transaction.setQuantity(quantity);
@@ -54,10 +55,8 @@ public class PortfolioTest {
     }
 
     @Test
-    void canPurchaseCryptocurrency() throws InterruptedException {
-        Double expectedBalance = 100.00;
-        LocalDateTime expectedStartDate = LocalDateTime.parse("2021-07-23T19:20:21");
-        Portfolio newRecord = createTestRecord(expectedBalance, expectedStartDate);
+    void canPurchaseCryptocurrency() throws InterruptedException, IllegalTransactionException {
+        Portfolio newRecord = createTestRecord(100.00, LocalDateTime.parse("2021-07-23T19:20:21"));
         MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
         mockTradingEngine.setMockPrice("DOGE", 3.0);
         createTransaction(newRecord, mockTradingEngine, "DOGE", 2.0, true);
@@ -66,10 +65,8 @@ public class PortfolioTest {
     }
 
     @Test
-    void canComputeProfitLoss() {
-        Double expectedBalance = 100.00;
-        LocalDateTime expectedStartDate = LocalDateTime.parse("2021-07-23T19:20:21");
-        Portfolio newRecord = createTestRecord(expectedBalance, expectedStartDate);
+    void canComputeProfitLoss() throws IllegalTransactionException {
+        Portfolio newRecord = createTestRecord(100.00, LocalDateTime.parse("2021-07-23T19:20:21"));
         MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
         mockTradingEngine.setMockPrice("DOGE", 3.0);
 
@@ -89,5 +86,35 @@ public class PortfolioTest {
         // User sells DOGE at $10 per coin, profit remains $14
         createTransaction(newRecord, mockTradingEngine, "DOGE", 2.0, false);
         assertThat(newRecord.getProfitLoss(mockTradingEngine)).isCloseTo(14.0, offset(0.1));
+    }
+
+    @Test
+    void throwsErrorIfUserBalanceIsTooLow() {
+        Portfolio newRecord = createTestRecord(100.00, LocalDateTime.parse("2021-07-23T19:20:21"));
+        MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
+        mockTradingEngine.setMockPrice("DOGE", 101.0);
+        assertThrows(IllegalTransactionException.class, () -> createTransaction(newRecord, mockTradingEngine, "DOGE", 1.0, true));
+    }
+
+    @Test
+    void throwsErrorIfUserSellsCryptoTheyDontOwn() {
+        Portfolio newRecord = createTestRecord(100.00, LocalDateTime.parse("2021-07-23T19:20:21"));
+        MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
+        mockTradingEngine.setMockPrice("DOGE", 101.0);
+        assertThrows(IllegalTransactionException.class, () -> createTransaction(newRecord, mockTradingEngine, "DOGE", 1.0, false));
+    }
+
+    @Test
+    void hasEndStatusCompleteIfPastEndDate() {
+        Portfolio newRecord = createTestRecord(100.00, LocalDateTime.parse("2021-07-23T19:20:21"));
+        newRecord.setEndDate(LocalDateTime.parse("2021-07-23T19:20:21"));
+        assertThat(newRecord.getStatus()).isEqualTo(Portfolio.Status.COMPLETE);
+    }
+
+    @Test
+    void hasEndStatusInCompleteIfBeforeEndDate() {
+        Portfolio newRecord = createTestRecord(100.00, LocalDateTime.parse("2021-07-23T19:20:21"));
+        newRecord.setEndDate(LocalDateTime.parse("2221-07-23T19:20:21"));
+        assertThat(newRecord.getStatus()).isEqualTo(Portfolio.Status.IN_PROGRESS);
     }
 }

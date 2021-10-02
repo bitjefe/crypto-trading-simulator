@@ -5,7 +5,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +24,20 @@ public class Portfolio {
 
     private Double startingBalance;
 
+    public enum Status {
+        COMPLETE, IN_PROGRESS
+    }
+
     @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<CryptoTransaction> cryptoTransactions;
 
-    public void adjustBalance(Double transactionPrice) {
-        this.balance = this.balance + transactionPrice;
+    public void adjustBalance(Double transactionPrice) throws IllegalTransactionException {
+        Double newBalance = this.balance + transactionPrice;
+        if (newBalance < 0.0) {
+            throw new IllegalTransactionException("Portfolio balance is too low!");
+        }
+        this.balance = newBalance;
     }
 
     private HashMap<String, Double> getCurrentHoldings() {
@@ -66,5 +73,20 @@ public class Portfolio {
             currentHoldingNetWorth += tradingService.fetchRemotePrice(cryptoTicker) * cryptoHoldings;
         }
         return currentHoldingNetWorth;
+    }
+
+    public boolean isCryptoHoldingQuantityPositive(Double quantity, String cryptocurrencyTicker) {
+        if (!this.getCurrentHoldings().containsKey(cryptocurrencyTicker)) {
+            return false;
+        }
+        return this.getCurrentHoldings().get(cryptocurrencyTicker) >= quantity;
+    }
+
+    public Status getStatus() {
+        if (this.endDate.isBefore(LocalDateTime.now())) {
+            return Status.COMPLETE;
+        }
+
+        return Status.IN_PROGRESS;
     }
 }
