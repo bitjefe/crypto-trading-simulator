@@ -23,7 +23,8 @@ public class CryptoTransaction {
 
     private Boolean isPurchase;
 
-    public void process() {
+    public void process(TradingEngineService tradingEngine) {
+        this.pricePerCoin = tradingEngine.fetchRemotePrice(this.cryptocurrencyTicker);
         Double transactionPrice = this.pricePerCoin * this.quantity;
         transactionPrice = this.isPurchase ? (transactionPrice * -1.0) : transactionPrice;
         this.portfolio.adjustBalance(transactionPrice);
