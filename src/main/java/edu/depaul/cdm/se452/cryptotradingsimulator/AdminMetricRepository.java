@@ -2,8 +2,9 @@ package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
-import javax.persistence.NamedQuery;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -15,4 +16,7 @@ public interface AdminMetricRepository extends CrudRepository<AdminMetric, Long>
 
     @Query("select u from AdminMetric u where u.name = 'sign_in'")
     public AdminMetric findByFoo();
+
+    @Query("select a from AdminMetric a where a.createdAt >= :createdAt")
+    List<AdminMetric> findAllWithCreatedAtAfter(@Param("createdAt") LocalDateTime createdAt);
 }
