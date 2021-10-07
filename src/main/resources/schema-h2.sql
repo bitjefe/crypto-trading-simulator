@@ -29,3 +29,11 @@ CREATE TABLE crypto_transaction
     FOREIGN KEY (cryptocurrency_ticker) REFERENCES cryptocurrency (ticker),
     FOREIGN KEY (portfolio_id) REFERENCES portfolio (id)
 );
+
+CREATE TABLE admin_metric
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    name       varchar2(40),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    primary key (id)
+);
