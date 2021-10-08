@@ -29,3 +29,11 @@ CREATE TABLE crypto_transaction
     FOREIGN KEY (cryptocurrency_ticker) REFERENCES cryptocurrency (ticker),
     FOREIGN KEY (portfolio_id) REFERENCES portfolio (id)
 );
+
+CREATE TABLE user_auth_sql
+(
+    id                    serial PRIMARY KEY,
+    username              VARCHAR(40),
+    password              VARCHAR(40)
+
+);
