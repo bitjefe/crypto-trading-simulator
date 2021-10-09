@@ -7,8 +7,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
+@EnableMongoRepositories
 public class CryptoTradingSimulatorApplication {
     private static final Logger log = LoggerFactory.getLogger(CryptoTradingSimulatorApplication.class);
 
@@ -41,6 +43,14 @@ public class CryptoTradingSimulatorApplication {
             log.info(String.valueOf(repository.findAll()));
             log.info(String.valueOf(repository.findById(1L).get().getCryptoTransactions()));
             log.info("---");
+        };
+    }
+
+    @Bean
+    public CommandLineRunner printCacheItems(AppCacheRepository repository) {
+        log.info("--- printCacheItems ---");
+        return (args) -> {
+          log.info(String.valueOf(repository.findAll()));
         };
     }
 
