@@ -1,5 +1,10 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +30,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+   @Bean
     public CommandLineRunner printLombokPortfolio() {
         log.info("--- printLombokPortfolio ---");
         return (args) -> {
@@ -34,7 +39,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+   @Bean
     public CommandLineRunner printPortfolios(PortfolioRepository repository) {
         log.info("--- printPortfolios ---");
         return (args) -> {
