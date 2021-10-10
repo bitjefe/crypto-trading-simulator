@@ -1,5 +1,6 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,10 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@EnableMongoRepositories
 public class CryptoTradingSimulatorApplication {
     private static final Logger log = LoggerFactory.getLogger(CryptoTradingSimulatorApplication.class);
 
@@ -50,7 +49,16 @@ public class CryptoTradingSimulatorApplication {
     public CommandLineRunner printCacheItems(AppCacheRepository repository) {
         log.info("--- printCacheItems ---");
         return (args) -> {
+            MockApiCall m = new MockApiCall("20190613");
+            log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
+
+            Integer expirationTimeSeconds = 5;
+            AppCache.cacheItem(m.getCacheKey(), m.veryExpensiveSlowAPICall(), expirationTimeSeconds, repository);
+            log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
+            log.info("Cache value: {}", AppCache.getCacheValue(m.getCacheKey(), repository));
+
           log.info(String.valueOf(repository.findAll()));
+            log.info("---");
         };
     }
 

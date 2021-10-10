@@ -5,18 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@EnableMongoRepositories
+@DataMongoTest
 public class AppCacheTest {
-    @Autowired
-    private TestEntityManager entityManager;
-
     @Autowired
     private AppCacheRepository repository;
 
@@ -29,8 +25,7 @@ public class AppCacheTest {
 
     @Test
     void uncachedItemReturnsIsCachedFalse() {
-        System.out.println("repository = " + repository);
-        assertThat(CacheManager.isCached(mockApiCall.getCacheKey())).isFalse();
+        assertThat(CacheManager.isCached(mockApiCall.getCacheKey(), repository)).isFalse();
     }
 
     @Test
@@ -38,26 +33,10 @@ public class AppCacheTest {
         // Make expensive API call and store result in cache
         Integer expirationTimeSeconds = 5;
         CacheManager.cacheItem(mockApiCall.getCacheKey(), mockApiCall.veryExpensiveSlowAPICall(), expirationTimeSeconds, repository);
-        assertThat(CacheManager.isCached(mockApiCall.getCacheKey())).isTrue();
+        System.out.println("repository.findAll() = " + repository.findAll().size());
+        System.out.println("repository.findById(\"api_response_20190613\") = " + repository.findById("api_response_20190613"));
+        assertThat(CacheManager.isCached(mockApiCall.getCacheKey(), repository)).isTrue();
     }
 
-    private class MockApiCall {
-        private String date;
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        public MockApiCall(String date) {
-            this.date = date;
-        }
-
-        public String getCacheKey() {
-            return String.format("api_response_%s", date);
-        }
-
-        public String veryExpensiveSlowAPICall() throws JsonProcessingException {
-            // Very slow API call that only grants us so many requests per day ...
-            Map<String, Double> apiResponse = Map.of("btc", 1000.00, "doge", 2000.00);
-            return mapper.writeValueAsString(apiResponse);
-        }
-    }
 }

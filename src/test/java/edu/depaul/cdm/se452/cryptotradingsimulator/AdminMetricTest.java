@@ -2,8 +2,10 @@ package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +21,9 @@ public class AdminMetricTest {
 
     @Autowired
     private AdminMetricRepository repository;
+
+    @MockBean(name = "printCacheItems")
+    CommandLineRunner mongoMock;
 
     @Test
     void canQueryMetrics() {
