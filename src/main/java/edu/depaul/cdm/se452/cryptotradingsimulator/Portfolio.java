@@ -2,6 +2,7 @@ package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import lombok.Data;
 import lombok.ToString;
+import org.slf4j.Logger;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,7 +41,7 @@ public class Portfolio {
         this.balance = newBalance;
     }
 
-    private HashMap<String, Double> getCurrentHoldings() {
+    public HashMap<String, Double> getCurrentHoldings() {
         HashMap<String, Double> currentHoldings = new HashMap<>();
         for (CryptoTransaction c : this.cryptoTransactions) {
             if (!currentHoldings.containsKey(c.getCryptocurrencyTicker())) {
@@ -58,7 +59,7 @@ public class Portfolio {
         return getCurrentPortfolioValue(tradingService) - this.startingBalance;
     }
 
-    private Double getCurrentPortfolioValue(TradingEngineService tradingService) {
+    public Double getCurrentPortfolioValue(TradingEngineService tradingService) {
         return this.balance + getCurrentHoldingNetWorth(tradingService);
     }
 
@@ -86,5 +87,13 @@ public class Portfolio {
         }
 
         return Status.IN_PROGRESS;
+    }
+
+    public void fancyToString(Logger log, TradingEngineService tradingService) {
+        log.info("Current Balance: {}", getBalance());
+        log.info("Current Holdings: {}", getCurrentHoldings());
+        log.info("Current Prices: {}", tradingService.getPrices());
+        log.info("Current Portfolio Value: {}", getCurrentPortfolioValue(tradingService));
+        log.info("Current Profit/Loss: {}", getProfitLoss(tradingService));
     }
 }

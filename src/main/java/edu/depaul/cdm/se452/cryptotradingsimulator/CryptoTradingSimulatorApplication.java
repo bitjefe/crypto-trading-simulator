@@ -9,6 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.persistence.EntityManager;
+import java.util.Arrays;
+
 @SpringBootApplication
 public class CryptoTradingSimulatorApplication {
     private static final Logger log = LoggerFactory.getLogger(CryptoTradingSimulatorApplication.class);
@@ -57,9 +60,68 @@ public class CryptoTradingSimulatorApplication {
             log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
             log.info("Cache value: {}", AppCache.getCacheValue(m.getCacheKey(), repository));
 
-          log.info(String.valueOf(repository.findAll()));
+            log.info(String.valueOf(repository.findAll()));
             log.info("---");
         };
+    }
+
+    @Bean
+    public CommandLineRunner printTransactions(PortfolioRepository portfolioRepository, CryptoTransactionRepository transactionRepository, EntityManager em) {
+        log.info("--- printTransactions ---");
+        MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
+        mockTradingEngine.setMockPrice("BTC", 1000.00);
+        mockTradingEngine.setMockPrice("ETH", 500.00);
+        return (args) -> {
+            Portfolio newRecord = new Portfolio();
+            newRecord.setStartingBalance(100000.00);
+            newRecord.setBalance(100000.00);
+            newRecord.setCryptoTransactions(Arrays.asList());
+            portfolioRepository.save(newRecord);
+
+            log.info("--- New portfolio created! ---");
+            newRecord.fancyToString(log, mockTradingEngine);
+            log.info("---");
+
+            log.info("--- User purchases 2 BTC and 3 ETH ---");
+            newRecord.fancyToString(log, mockTradingEngine);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, true);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, true);
+            newRecord = portfolioRepository.findById(newRecord.getId()).get();
+            log.info("---");
+
+            log.info("--- BTC and ETH prices spike! ---");
+            mockTradingEngine.setMockPrice("BTC", 2000.00);
+            mockTradingEngine.setMockPrice("ETH", 1000.00);
+            newRecord.fancyToString(log, mockTradingEngine);
+            log.info("---");
+
+            log.info("--- User decides to sell their current holdings ---");
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, false);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, false);
+            newRecord = portfolioRepository.findById(newRecord.getId()).get();
+            newRecord.fancyToString(log, mockTradingEngine);
+            log.info("---");
+        };
+    }
+
+    private CryptoTransaction createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, CryptoTransactionRepository ctr, PortfolioRepository pr,
+                                                String ticker, Double quantity, Boolean isPurchase) {
+        CryptoTransaction transaction = new CryptoTransaction();
+        transaction.setCryptocurrencyTicker(ticker);
+        transaction.setQuantity(quantity);
+        transaction.setIsPurchase(isPurchase);
+        transaction.setPortfolio(newRecord);
+
+        try {
+            transaction.process(mockTradingEngine);
+        } catch (IllegalTransactionException e) {
+            e.printStackTrace();
+        }
+
+        ctr.save(transaction);
+        pr.save(newRecord);
+
+        return transaction;
     }
 
     public static void main(String[] args) {
