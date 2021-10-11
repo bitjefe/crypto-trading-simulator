@@ -28,7 +28,6 @@ public class AppCache {
 
     static Boolean isCached(String cacheKey, AppCacheRepository repository) {
         Optional<AppCache> appCache = repository.findById(cacheKey);
-        System.out.println("appCache = " + appCache);
         return appCache.isPresent() && !appCache.get().isExpired();
     }
 

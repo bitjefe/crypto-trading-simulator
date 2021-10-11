@@ -1,6 +1,5 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,17 +49,19 @@ public class CryptoTradingSimulatorApplication {
 
     @Bean
     public CommandLineRunner printCacheItems(AppCacheRepository repository) {
-        log.info("--- printCacheItems ---");
         return (args) -> {
+            log.info("--- printCacheItems ---");
+            log.info("--- Making a new API call, is the result in cache and non-expired? ---");
             MockApiCall m = new MockApiCall("20190613");
             log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
 
             Integer expirationTimeSeconds = 5;
+            log.info("--- Making API call and caching item ... ---");
             AppCache.cacheItem(m.getCacheKey(), m.veryExpensiveSlowAPICall(), expirationTimeSeconds, repository);
+
+            log.info("--- Making the same API call, is the result already in cache? ---");
             log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
             log.info("Cache value: {}", AppCache.getCacheValue(m.getCacheKey(), repository));
-
-            log.info(String.valueOf(repository.findAll()));
             log.info("---");
         };
     }
@@ -83,10 +84,10 @@ public class CryptoTradingSimulatorApplication {
             log.info("---");
 
             log.info("--- User purchases 2 BTC and 3 ETH ---");
-            newRecord.fancyToString(log, mockTradingEngine);
             createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, true);
             createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, true);
             newRecord = portfolioRepository.findById(newRecord.getId()).get();
+            newRecord.fancyToString(log, mockTradingEngine);
             log.info("---");
 
             log.info("--- BTC and ETH prices spike! ---");
