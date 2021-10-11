@@ -1,10 +1,6 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import javax.persistence.EntityManager;
+import java.util.Arrays;
 
 @SpringBootApplication
 public class CryptoTradingSimulatorApplication {
@@ -47,6 +46,82 @@ public class CryptoTradingSimulatorApplication {
             log.info(String.valueOf(repository.findById(1L).get().getCryptoTransactions()));
             log.info("---");
         };
+    }
+
+    @Bean
+    public CommandLineRunner printCacheItems(AppCacheRepository repository) {
+        log.info("--- printCacheItems ---");
+        return (args) -> {
+            MockApiCall m = new MockApiCall("20190613");
+            log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
+
+            Integer expirationTimeSeconds = 5;
+            AppCache.cacheItem(m.getCacheKey(), m.veryExpensiveSlowAPICall(), expirationTimeSeconds, repository);
+            log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
+            log.info("Cache value: {}", AppCache.getCacheValue(m.getCacheKey(), repository));
+
+            log.info(String.valueOf(repository.findAll()));
+            log.info("---");
+        };
+    }
+
+    @Bean
+    public CommandLineRunner printTransactions(PortfolioRepository portfolioRepository, CryptoTransactionRepository transactionRepository, EntityManager em) {
+        log.info("--- printTransactions ---");
+        MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
+        mockTradingEngine.setMockPrice("BTC", 1000.00);
+        mockTradingEngine.setMockPrice("ETH", 500.00);
+        return (args) -> {
+            Portfolio newRecord = new Portfolio();
+            newRecord.setStartingBalance(100000.00);
+            newRecord.setBalance(100000.00);
+            newRecord.setCryptoTransactions(Arrays.asList());
+            portfolioRepository.save(newRecord);
+
+            log.info("--- New portfolio created! ---");
+            newRecord.fancyToString(log, mockTradingEngine);
+            log.info("---");
+
+            log.info("--- User purchases 2 BTC and 3 ETH ---");
+            newRecord.fancyToString(log, mockTradingEngine);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, true);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, true);
+            newRecord = portfolioRepository.findById(newRecord.getId()).get();
+            log.info("---");
+
+            log.info("--- BTC and ETH prices spike! ---");
+            mockTradingEngine.setMockPrice("BTC", 2000.00);
+            mockTradingEngine.setMockPrice("ETH", 1000.00);
+            newRecord.fancyToString(log, mockTradingEngine);
+            log.info("---");
+
+            log.info("--- User decides to sell their current holdings ---");
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, false);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, false);
+            newRecord = portfolioRepository.findById(newRecord.getId()).get();
+            newRecord.fancyToString(log, mockTradingEngine);
+            log.info("---");
+        };
+    }
+
+    private CryptoTransaction createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, CryptoTransactionRepository ctr, PortfolioRepository pr,
+                                                String ticker, Double quantity, Boolean isPurchase) {
+        CryptoTransaction transaction = new CryptoTransaction();
+        transaction.setCryptocurrencyTicker(ticker);
+        transaction.setQuantity(quantity);
+        transaction.setIsPurchase(isPurchase);
+        transaction.setPortfolio(newRecord);
+
+        try {
+            transaction.process(mockTradingEngine);
+        } catch (IllegalTransactionException e) {
+            e.printStackTrace();
+        }
+
+        ctr.save(transaction);
+        pr.save(newRecord);
+
+        return transaction;
     }
 
     public static void main(String[] args) {

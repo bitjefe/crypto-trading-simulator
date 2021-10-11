@@ -2,8 +2,14 @@ package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.MockBeans;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -19,6 +25,9 @@ public class PortfolioTest {
 
     @Autowired
     private PortfolioRepository repository;
+
+    @MockBean(name = "printCacheItems")
+    CommandLineRunner mongoMock;
 
     private Portfolio createTestRecord(Double expectedBalance, LocalDateTime expectedStartDate) {
         Portfolio newRecord = new Portfolio();
