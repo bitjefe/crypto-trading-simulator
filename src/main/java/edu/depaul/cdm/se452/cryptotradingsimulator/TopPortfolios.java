@@ -1,15 +1,13 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
