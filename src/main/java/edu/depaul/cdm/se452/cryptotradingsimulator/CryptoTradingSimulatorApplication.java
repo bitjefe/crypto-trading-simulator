@@ -47,8 +47,8 @@ public class CryptoTradingSimulatorApplication {
     }
 
     @Bean
-    public CommandLineRunner userSignUp(UserAuthenticationRepository repository) {
-        log.info("--- userSignUp ---");
+    public CommandLineRunner userLogin(UserAuthenticationRepository repository) {
+        log.info("--- userLogin ---");
         return (args) -> {
             UserAuthentication userAuth = new UserAuthentication();
 
@@ -59,9 +59,23 @@ public class CryptoTradingSimulatorApplication {
                 userAuth.signUp(repository);
             }
 
-            log.info(String.valueOf(repository.findAll()));
+            // log.info(String.valueOf(repository.findAll()));
 
             // log.info("---");
+        };
+    }
+
+    @Bean
+    public CommandLineRunner printTopPortfolios(TopPortfoliosRepository topPortfoliosRep,
+            PortfolioRepository portfoliorep) {
+        log.info("--- portofoliosRanking ---");
+        return (args) -> {
+            // System.out.println(portfoliorep.findById(1L));
+            TopPortfolios topPortf = new TopPortfolios();
+            topPortf.rankPortfolios(topPortfoliosRep, portfoliorep);
+
+            // log.info(String.valueOf(topPortfoliosRep.findAll()));
+
         };
     }
 

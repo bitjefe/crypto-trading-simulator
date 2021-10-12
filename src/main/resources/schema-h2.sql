@@ -37,3 +37,10 @@ CREATE TABLE user_auth_sql
     password              VARCHAR(40)
 
 );
+
+CREATE TABLE portfolios_ranking
+(
+    id                    INT PRIMARY KEY,
+    score                 VARCHAR(40)
+
+);
