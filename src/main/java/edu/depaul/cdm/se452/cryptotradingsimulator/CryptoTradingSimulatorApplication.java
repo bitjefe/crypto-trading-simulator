@@ -74,7 +74,7 @@ public class CryptoTradingSimulatorApplication {
             TopPortfolios topPortf = new TopPortfolios();
             topPortf.rankPortfolios(topPortfoliosRep, portfoliorep);
 
-            // log.info(String.valueOf(topPortfoliosRep.findAll()));
+            log.info(String.valueOf(topPortfoliosRep.findAll()));
 
         };
     }

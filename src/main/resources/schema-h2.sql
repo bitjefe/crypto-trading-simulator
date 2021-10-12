@@ -40,7 +40,8 @@ CREATE TABLE user_auth_sql
 
 CREATE TABLE portfolios_ranking
 (
-    id                    INT PRIMARY KEY,
-    score                 VARCHAR(40)
+    score                 VARCHAR(40) PRIMARY KEY,
+    id                    INT 
+    
 
 );

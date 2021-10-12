@@ -17,9 +17,10 @@ import lombok.Data;
 @Entity
 @Table(name = "portfolios_ranking")
 public class TopPortfolios implements Comparable<TopPortfolios> {
-    @Id
+
     private long id;
 
+    @Id
     @Column
     private Double score;
     /*
@@ -46,7 +47,7 @@ public class TopPortfolios implements Comparable<TopPortfolios> {
         for (TopPortfolios pf : topPortfolioList) {
             topPortfoliosRep.save(pf);
         }
-        System.out.println(topPortfoliosRep);
+        // System.out.println(topPortfoliosRep);
     }
 
     @Override
