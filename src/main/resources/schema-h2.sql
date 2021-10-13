@@ -30,6 +30,19 @@ CREATE TABLE crypto_transaction
     FOREIGN KEY (portfolio_id) REFERENCES portfolio (id)
 );
 
+CREATE TABLE user_auth_sql
+(
+    id                    serial PRIMARY KEY,
+    username              VARCHAR(40),
+    password              VARCHAR(40)
+);
+
+CREATE TABLE portfolios_ranking
+(
+    score                 VARCHAR(40) PRIMARY KEY,
+    id                    INT 
+);
+
 CREATE TABLE admin_metric
 (
     id         INT AUTO_INCREMENT PRIMARY KEY,

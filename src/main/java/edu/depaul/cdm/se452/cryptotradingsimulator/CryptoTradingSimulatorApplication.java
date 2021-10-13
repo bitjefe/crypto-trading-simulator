@@ -1,6 +1,6 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
-import org.bson.types.ObjectId;
+//import org.graalvm.compiler.core.common.cfg.Loop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,8 @@ public class CryptoTradingSimulatorApplication {
     public CommandLineRunner printLombokPortfolio() {
         log.info("--- printLombokPortfolio ---");
         return (args) -> {
-            log.info(String.valueOf(new Portfolio()));
+
+            // log.info(String.valueOf(new Portfolio()));
             log.info("---");
         };
     }
@@ -42,26 +43,60 @@ public class CryptoTradingSimulatorApplication {
     public CommandLineRunner printPortfolios(PortfolioRepository repository) {
         log.info("--- printPortfolios ---");
         return (args) -> {
-            log.info(String.valueOf(repository.findAll()));
-            log.info(String.valueOf(repository.findById(1L).get().getCryptoTransactions()));
+            // log.info(String.valueOf(repository.findAll()));
+            // log.info(String.valueOf(repository.findById(1L).get().getCryptoTransactions()));
             log.info("---");
         };
     }
 
     @Bean
-    public CommandLineRunner printCacheItems(AppCacheRepository repository) {
-        log.info("--- printCacheItems ---");
+    public CommandLineRunner userLogin(UserAuthenticationRepository repository) {
+        log.info("--- userLogin ---");
         return (args) -> {
+            UserAuthentication userAuth = new UserAuthentication();
+
+            if (userAuth.signIn(repository) == true) {
+                System.out.println("You just logged in, welcome!");
+            } else {
+                System.out.println("No account found. Please sign up below: ");
+                userAuth.signUp(repository);
+            }
+
+            // log.info(String.valueOf(repository.findAll()));
+
+            // log.info("---");
+        };
+    }
+
+    public CommandLineRunner printCacheItems(AppCacheRepository repository) {
+        return (args) -> {
+            log.info("--- printCacheItems ---");
+            log.info("--- Making a new API call, is the result in cache and non-expired? ---");
             MockApiCall m = new MockApiCall("20190613");
             log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
 
             Integer expirationTimeSeconds = 5;
+            log.info("--- Making API call and caching item ... ---");
             AppCache.cacheItem(m.getCacheKey(), m.veryExpensiveSlowAPICall(), expirationTimeSeconds, repository);
+
+            log.info("--- Making the same API call, is the result already in cache? ---");
             log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
             log.info("Cache value: {}", AppCache.getCacheValue(m.getCacheKey(), repository));
-
-            log.info(String.valueOf(repository.findAll()));
             log.info("---");
+        };
+    }
+
+    @Bean
+    public CommandLineRunner printTopPortfolios(TopPortfoliosRepository topPortfoliosRep,
+            PortfolioRepository portfoliorep) {
+        log.info("--- portofoliosRanking ---");
+        return (args) -> {
+            // System.out.println(portfoliorep.findById(1L));
+            TopPortfolios topPortf = new TopPortfolios();
+            topPortf.rankPortfolios(topPortfoliosRep, portfoliorep);
+
+            log.info(String.valueOf(topPortfoliosRep.findAll()));
+
         };
     }
 
@@ -83,10 +118,10 @@ public class CryptoTradingSimulatorApplication {
             log.info("---");
 
             log.info("--- User purchases 2 BTC and 3 ETH ---");
-            newRecord.fancyToString(log, mockTradingEngine);
             createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, true);
             createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, true);
             newRecord = portfolioRepository.findById(newRecord.getId()).get();
+            newRecord.fancyToString(log, mockTradingEngine);
             log.info("---");
 
             log.info("--- BTC and ETH prices spike! ---");

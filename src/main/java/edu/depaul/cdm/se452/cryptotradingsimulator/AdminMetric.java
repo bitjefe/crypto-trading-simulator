@@ -30,7 +30,9 @@ public class AdminMetric {
                 groupedMetrics.put(m.createdAtDay(), new ArrayList<>());
             }
 
-            groupedMetrics.get(m.createdAtDay()).add(m);
+            List<AdminMetric> metricsByDay = groupedMetrics.get(m.createdAtDay());
+            metricsByDay.add(m);
+            groupedMetrics.put(m.createdAtDay(), metricsByDay);
         });
 
         return groupedMetrics;
