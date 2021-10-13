@@ -35,13 +35,18 @@ CREATE TABLE user_auth_sql
     id                    serial PRIMARY KEY,
     username              VARCHAR(40),
     password              VARCHAR(40)
-
 );
 
 CREATE TABLE portfolios_ranking
 (
     score                 VARCHAR(40) PRIMARY KEY,
     id                    INT 
-    
+);
 
+CREATE TABLE admin_metric
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    name       varchar2(40),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    primary key (id)
 );

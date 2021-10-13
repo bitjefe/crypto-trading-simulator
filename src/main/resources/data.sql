@@ -11,3 +11,7 @@ insert into cryptocurrency values ('BTC'),
                                   ('DOGE');
 
 insert into crypto_transaction values (null, 1, 'BTC', 1.00, 5637.00, true);
+
+insert into admin_metric values (null, 'sign_up', null);
+insert into admin_metric values (null, 'sign_up', null);
+insert into admin_metric values (null, 'sign_in', null);

@@ -27,8 +27,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 test {
 	useJUnitPlatform()
+	testLogging.showStandardStreams = true
 }

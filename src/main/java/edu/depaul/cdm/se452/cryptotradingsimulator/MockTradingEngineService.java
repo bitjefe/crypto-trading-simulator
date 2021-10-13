@@ -10,6 +10,11 @@ public class MockTradingEngineService implements TradingEngineService {
         return mockPrices.get(cryptoTicker);
     }
 
+    @Override
+    public HashMap<String, Double> getPrices() {
+        return mockPrices;
+    }
+
     public void setMockPrice(String cryptoTicker, Double mockPrice) {
         mockPrices.put(cryptoTicker, mockPrice);
     }
