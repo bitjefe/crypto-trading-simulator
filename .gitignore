@@ -38,3 +38,6 @@ out/
 
 # mac only
 .DS_Store
+
+#envs
+.env

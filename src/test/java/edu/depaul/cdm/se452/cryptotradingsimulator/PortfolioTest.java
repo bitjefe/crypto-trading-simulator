@@ -126,4 +126,17 @@ public class PortfolioTest {
         newRecord.setEndDate(LocalDateTime.parse("2221-07-23T19:20:21"));
         assertThat(newRecord.getStatus()).isEqualTo(Portfolio.Status.IN_PROGRESS);
     }
+
+    /* Added By Jeff: Work in Progress 10/10/21
+    *
+    *   @Chris: Need help to iterate through the top ten coins JSON String
+    *           - Be able to add our 6 prefined coins to prices
+    *           - return the prices HashMap
+    *
+    */
+    @Test
+    void canFetchRealPrices() throws IllegalTransactionException {
+        RealTradingEngineService realTradingService = new RealTradingEngineService();
+        realTradingService.fetchTopTenCoins();
+    }
 }
