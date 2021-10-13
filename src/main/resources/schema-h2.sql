@@ -32,7 +32,7 @@ CREATE TABLE crypto_transaction
 
 CREATE TABLE user_auth_sql
 (
-    id                    serial PRIMARY KEY,
+    id                    INT AUTO_INCREMENT PRIMARY KEY,
     username              VARCHAR(40),
     password              VARCHAR(40)
 );
