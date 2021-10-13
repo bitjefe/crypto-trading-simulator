@@ -10,6 +10,10 @@ insert into cryptocurrency values ('BTC'),
                                   ('BCH'),
                                   ('DOGE');
 
+insert into user_auth_sql values (Chris, 1234);
+insert into user_auth_sql values (Jeff, 1234);
+insert into user_auth_sql values (Mohammad, 1234);                                    
+
 insert into crypto_transaction values (null, 1, 'BTC', 1.00, 5637.00, true);
 
 insert into admin_metric values (null, 'sign_up', null);
