@@ -1,7 +1,5 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
-import java.util.Map;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.IOException;
 import java.net.URI;
@@ -15,19 +13,35 @@ import io.github.cdimascio.dotenv.Dotenv;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RealTradingEngineService implements TradingEngineService {
-    private HashMap<String, Double> prices = new HashMap<>();
+    private final AppCacheRepository appCacheRepository;
+
+    private String cacheKey = "coinmc_api_call";
+
+    public RealTradingEngineService(AppCacheRepository appCacheRepository) {
+        this.appCacheRepository = appCacheRepository;
+    }
 
     @Override
     public Double fetchRemotePrice(String cryptoTicker) {
-        return prices.get(cryptoTicker);
+        return getPrices().get(cryptoTicker);
     }
 
     @Override
     public HashMap<String, Double> getPrices() {
-        return prices;
+        if (AppCache.isCached(cacheKey, appCacheRepository)) {
+            return parseResponse(AppCache.getCacheValue(cacheKey, appCacheRepository));
+        }
+
+        String apiResponse = this.callApi();
+        AppCache.cacheItem(cacheKey, apiResponse, 1000, appCacheRepository);
+        return fetchTopTenCoins();
     }
 
     public HashMap<String, Double> fetchTopTenCoins() {
+        return parseResponse(this.callApi());
+    }
+
+    public String callApi() {
         Dotenv dotenv = Dotenv.load();
         String apiKey = dotenv.get("COINMC_API_KEY");
 
@@ -38,20 +52,9 @@ public class RealTradingEngineService implements TradingEngineService {
                 .header("X-CMC_PRO_API_KEY", apiKey)
                 .build();
 
-        HttpResponse<String> response;
-
         try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("---");
-            String apiResponse = response.body();
-            ObjectMapper mapper = new ObjectMapper();
-            CoinMCResponse items = mapper.readValue(apiResponse, CoinMCResponse.class);
 
-            prices = new HashMap<>();
-            items.data.stream().forEach(d -> {
-                prices.put(d.symbol, d.quote.usd.price);
-            });
-
+            return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -60,10 +63,25 @@ public class RealTradingEngineService implements TradingEngineService {
             e.printStackTrace();
         }
 
-        return prices;
+        return null;
     }
 
-    public void setPrice(String cryptoTicker, Double price) {
-        prices.put(cryptoTicker, price);
+    private HashMap<String, Double> parseResponse(String apiResponse) {
+        HashMap<String, Double> prices = new HashMap<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        CoinMCResponse items = null;
+
+        try {
+            items = mapper.readValue(apiResponse, CoinMCResponse.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        items.data.stream().forEach(d -> {
+            prices.put(d.symbol, d.quote.usd.price);
+        });
+
+        return prices;
     }
 }

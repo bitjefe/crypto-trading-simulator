@@ -140,14 +140,13 @@ public class CryptoTradingSimulatorApplication {
     }
 
     @Bean
-    public CommandLineRunner fetchTop10Coins() {
+    public CommandLineRunner fetchTop10Coins(AppCacheRepository repo) {
         log.info("--- fetchTop10Coins ---");
         return (args) -> {
             log.info("Hello world");
-            RealTradingEngineService s = new RealTradingEngineService();
+            RealTradingEngineService s = new RealTradingEngineService(repo);
             log.info("--- Recent Coin Prices ---");
-            log.info(String.valueOf(s.fetchTopTenCoins()));
-            s.fetchTopTenCoins();
+            log.info(String.valueOf(s.getPrices()));
             log.info("---");
         };
     }
