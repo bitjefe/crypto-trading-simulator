@@ -139,6 +139,19 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
+    @Bean
+    public CommandLineRunner fetchTop10Coins() {
+        log.info("--- fetchTop10Coins ---");
+        return (args) -> {
+            log.info("Hello world");
+            RealTradingEngineService s = new RealTradingEngineService();
+            log.info("--- Recent Coin Prices ---");
+            log.info(String.valueOf(s.fetchTopTenCoins()));
+            s.fetchTopTenCoins();
+            log.info("---");
+        };
+    }
+
     private CryptoTransaction createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, CryptoTransactionRepository ctr, PortfolioRepository pr,
                                                 String ticker, Double quantity, Boolean isPurchase) {
         CryptoTransaction transaction = new CryptoTransaction();

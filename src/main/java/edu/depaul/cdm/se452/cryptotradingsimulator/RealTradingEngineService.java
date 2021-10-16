@@ -8,11 +8,11 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import edu.depaul.cdm.se452.cryptotradingsimulator.dto.CoinMCResponse.CoinMCResponse;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.h2.util.json.JSONObject;
 
 public class RealTradingEngineService implements TradingEngineService {
     private HashMap<String, Double> prices = new HashMap<>();
@@ -44,13 +44,13 @@ public class RealTradingEngineService implements TradingEngineService {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("---");
             String apiResponse = response.body();
-            
             ObjectMapper mapper = new ObjectMapper();
-            Map<String,Object> result = mapper.readValue(apiResponse, Map.class);
+            CoinMCResponse items = mapper.readValue(apiResponse, CoinMCResponse.class);
 
-            String dataJsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result.get("data"));
-            System.out.println(dataJsonString);
-            System.out.println("---");
+            prices = new HashMap<>();
+            items.data.stream().forEach(d -> {
+                prices.put(d.symbol, d.quote.usd.price);
+            });
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
