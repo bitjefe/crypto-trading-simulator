@@ -2,8 +2,7 @@ CREATE SEQUENCE hibernate_sequence START WITH 100 INCREMENT BY 1;
 
 CREATE TABLE portfolio
 (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    PRIMARY KEY (ID),
+    id         SERIAL PRIMARY KEY,
 
     balance    DECIMAL(10, 2),
     starting_balance    DECIMAL(10, 2),
@@ -18,7 +17,7 @@ CREATE TABLE cryptocurrency
 
 CREATE TABLE crypto_transaction
 (
-    id                    INT AUTO_INCREMENT PRIMARY KEY,
+    id                    SERIAL PRIMARY KEY,
     portfolio_id          INT,
     cryptocurrency_ticker VARCHAR(6),
     quantity              DECIMAL(10, 5),
@@ -30,7 +29,7 @@ CREATE TABLE crypto_transaction
 
 CREATE TABLE user_auth_sql
 (
-    id                    INT AUTO_INCREMENT PRIMARY KEY,
+    id                    SERIAL PRIMARY KEY,
     username              VARCHAR(40),
     password              VARCHAR(40)
 );
@@ -38,13 +37,14 @@ CREATE TABLE user_auth_sql
 CREATE TABLE portfolios_ranking
 (
     score                 VARCHAR(40) PRIMARY KEY,
-    id                    INT 
+    id                    INT
 );
 
 CREATE TABLE admin_metric
 (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
+    id         SERIAL PRIMARY KEY,
     name       varchar2(40),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     primary key (id)
 );
+
