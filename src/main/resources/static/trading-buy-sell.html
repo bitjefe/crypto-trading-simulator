@@ -1,0 +1,89 @@
+<!--LANDING PAGE -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Crypto Trading Simulator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+<div class="app">
+    <div class="portfolio-header mb-3">
+        <h1>View Portfolio</h1>
+    </div>
+    <div class="container-fluid view-portfolio">
+        <div class="row">
+            <div class="col-2">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Portfolio Name</label>
+                        <div>High Risk Coins</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Starting Balance</label>
+                        <div>$10,000.00</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Balance</label>
+                        <div>$6325.00</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Net Worth</label>
+                        <div>$16875.00</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <div>10/10/2021</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <div>11/20/2021</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <div>Active</div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-10">
+                <form>
+                    <div class="mb-3">
+                        <label for="cryptocurrency-dropdown" class="form-label">Crypcurrency</label>
+                        <select class="form-select" id="cryptocurrency-dropdown">
+                            <option selected>Cryptocurrency</option>
+                            <option data-price="62238.280592596006" value="BTC">Bitcoin - BTC - $62238.28</option>
+                            <option data-price="3809.9037121447377" value="ETH">Ethereum - ETH - $3809.90</option>
+                            <option data-price="489.81256860581925" value="BNB">Binance Coin - BNB - $489.81</option>
+                            <option data-price="2.12879373933911" value="ADA">Cardano - ADA - $2.13</option>
+                            <option data-price="0.99982872608619" value="USDT">Tether - USDT - $1.00</option>
+                            <option data-price="1.09007965736548" value="XRP">XRP - XRP - $1.09</option>
+                            <option data-price="157.68049756930105" value="SOL">Solana - SOL - $157.68</option>
+                            <option data-price="41.05384220897975" value="DOT">Polkadot - DOT - $41.05</option>
+                            <option data-price="0.99970565890671" value="USDC">USD Coin - USDC - $1.00</option>
+                            <option data-price="0.24730809470615" value="DOGE">Dogecoin - DOGE - $0.25</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" placeholder="10.50">
+                    </div>
+                    <div class="mb-3">
+                        <label for="transaction-value" class="form-label">Transaction Value</label>
+                        <input class="form-control" id="transaction-value" placeholder="$" disabled>
+                    </div>
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
