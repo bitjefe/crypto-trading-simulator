@@ -30,7 +30,7 @@ public class CryptoTransaction {
         if (isSale) {
             assertUserOwnsEnoughCryptocurrency();
         }
-        this.pricePerCoin = tradingEngine.fetchRemotePrice(this.cryptocurrency.getTicker());
+        this.pricePerCoin = cryptocurrency.getPrice(tradingEngine);
         Double transactionPrice = this.pricePerCoin * this.quantity;
         transactionPrice = this.isPurchase ? (transactionPrice * -1.0) : transactionPrice;
         this.portfolio.adjustBalance(transactionPrice);

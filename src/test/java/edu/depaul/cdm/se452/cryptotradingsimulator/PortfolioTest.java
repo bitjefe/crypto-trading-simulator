@@ -83,10 +83,12 @@ public class PortfolioTest {
 
         // User purchases 2 DOGE for $3 per coin
         createTransaction(newRecord, mockTradingEngine, "DOGE", 2.0, true);
+        newRecord = repository.findById(newRecord.getId()).get();
 
         // User purchases 3 BTC for $5 per coin
         mockTradingEngine.setMockPrice("BTC", 3.0);
         createTransaction(newRecord, mockTradingEngine, "BTC", 5.0, true);
+        newRecord = repository.findById(newRecord.getId()).get();
 
         assertThat(newRecord.getProfitLoss(mockTradingEngine)).isCloseTo(0.0, offset(0.1));
 
@@ -96,6 +98,8 @@ public class PortfolioTest {
 
         // User sells DOGE at $10 per coin, profit remains $14
         createTransaction(newRecord, mockTradingEngine, "DOGE", 2.0, false);
+        newRecord = repository.findById(newRecord.getId()).get();
+
         assertThat(newRecord.getProfitLoss(mockTradingEngine)).isCloseTo(14.0, offset(0.1));
     }
 
