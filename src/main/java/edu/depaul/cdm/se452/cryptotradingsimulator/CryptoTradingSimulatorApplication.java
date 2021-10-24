@@ -101,7 +101,7 @@ public class CryptoTradingSimulatorApplication {
     }
 
     @Bean
-    public CommandLineRunner printTransactions(PortfolioRepository portfolioRepository, CryptoTransactionRepository transactionRepository, EntityManager em) {
+    public CommandLineRunner printTransactions(PortfolioRepository portfolioRepository, CryptoTransactionRepository transactionRepository, CryptocurrencyRepository cryptoRepo, EntityManager em) {
         log.info("--- printTransactions ---");
         MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
         mockTradingEngine.setMockPrice("BTC", 1000.00);
@@ -118,8 +118,8 @@ public class CryptoTradingSimulatorApplication {
             log.info("---");
 
             log.info("--- User purchases 2 BTC and 3 ETH ---");
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, true);
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, true);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, true, cryptoRepo);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, true, cryptoRepo);
             newRecord = portfolioRepository.findById(newRecord.getId()).get();
             newRecord.fancyToString(log, mockTradingEngine);
             log.info("---");
@@ -131,8 +131,8 @@ public class CryptoTradingSimulatorApplication {
             log.info("---");
 
             log.info("--- User decides to sell their current holdings ---");
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, false);
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, false);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, false, cryptoRepo);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, false, cryptoRepo);
             newRecord = portfolioRepository.findById(newRecord.getId()).get();
             newRecord.fancyToString(log, mockTradingEngine);
             log.info("---");
@@ -140,21 +140,22 @@ public class CryptoTradingSimulatorApplication {
     }
 
     @Bean
-    public CommandLineRunner fetchTop10Coins(AppCacheRepository repo) {
+    public CommandLineRunner fetchTop10Coins(AppCacheRepository repo, CryptocurrencyRepository cryptoRepo) {
         log.info("--- fetchTop10Coins ---");
         return (args) -> {
-            log.info("Hello world");
+            log.info("Hello world123");
             RealTradingEngineService s = new RealTradingEngineService(repo);
             log.info("--- Recent Coin Prices ---");
+            log.info(String.valueOf(cryptoRepo.findById("BTC")));
             log.info(String.valueOf(s.getPrices()));
             log.info("---");
         };
     }
 
     private CryptoTransaction createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, CryptoTransactionRepository ctr, PortfolioRepository pr,
-                                                String ticker, Double quantity, Boolean isPurchase) {
+                                                String ticker, Double quantity, Boolean isPurchase, CryptocurrencyRepository cryptoRepo) {
         CryptoTransaction transaction = new CryptoTransaction();
-        transaction.setCryptocurrencyTicker(ticker);
+        transaction.setCryptocurrency(cryptoRepo.findById(ticker).get());
         transaction.setQuantity(quantity);
         transaction.setIsPurchase(isPurchase);
         transaction.setPortfolio(newRecord);
