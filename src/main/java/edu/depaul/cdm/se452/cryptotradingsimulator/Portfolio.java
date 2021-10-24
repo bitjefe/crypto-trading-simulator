@@ -95,5 +95,6 @@ public class Portfolio {
         log.info("Current Prices: {}", tradingService.getPrices());
         log.info("Current Portfolio Value: {}", getCurrentPortfolioValue(tradingService));
         log.info("Current Profit/Loss: {}", getProfitLoss(tradingService));
+        getCryptoTransactions().stream().forEach(s -> System.out.println("s = " + s));
     }
 }

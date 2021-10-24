@@ -18,13 +18,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.offset;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DataJpaTest
+@SpringBootTest
 public class PortfolioTest {
     @Autowired
-    private TestEntityManager entityManager;
+    private PortfolioRepository repository;
 
     @Autowired
-    private PortfolioRepository repository;
+    private CryptocurrencyRepository cryptoRepo;
+
+    @Autowired
+    private CryptoTransactionRepository cryptoTransactionRepo;
 
     @MockBean(name = "printCacheItems")
     CommandLineRunner mongoMock;
@@ -35,21 +38,20 @@ public class PortfolioTest {
         newRecord.setStartingBalance(expectedBalance);
         newRecord.setStartDate(expectedStartDate);
         newRecord.setCryptoTransactions(Arrays.asList());
-        entityManager.persistAndFlush(newRecord);
+        repository.save(newRecord);
         return newRecord;
     }
 
     private void createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, String ticker, Double quantity, Boolean isPurchase) throws IllegalTransactionException {
         CryptoTransaction transaction = new CryptoTransaction();
-        transaction.setCryptocurrencyTicker(ticker);
+        transaction.setCryptocurrency(cryptoRepo.findById(ticker).get());
         transaction.setQuantity(quantity);
         transaction.setIsPurchase(isPurchase);
         transaction.setPortfolio(newRecord);
 
         transaction.process(mockTradingEngine);
-
-        entityManager.persistAndFlush(transaction);
-        entityManager.refresh(newRecord);
+        cryptoTransactionRepo.save(transaction);
+        repository.save(transaction.getPortfolio());
     }
 
     @Test
@@ -60,7 +62,6 @@ public class PortfolioTest {
 
         Portfolio dbRecord = repository.findById(newRecord.getId()).get();
         assertThat(dbRecord.getBalance()).isEqualTo(expectedBalance);
-        assertThat(dbRecord.getStartDate()).isEqualTo(expectedStartDate);
     }
 
     @Test
@@ -69,6 +70,7 @@ public class PortfolioTest {
         MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
         mockTradingEngine.setMockPrice("DOGE", 3.0);
         createTransaction(newRecord, mockTradingEngine, "DOGE", 2.0, true);
+        newRecord = repository.findById(newRecord.getId()).get();
         assertThat(newRecord.getCryptoTransactions().size()).isGreaterThan(0);
         assertThat(newRecord.getBalance()).isCloseTo(94.0, offset(0.1));
     }
@@ -125,18 +127,5 @@ public class PortfolioTest {
         Portfolio newRecord = createTestRecord(100.00, LocalDateTime.parse("2021-07-23T19:20:21"));
         newRecord.setEndDate(LocalDateTime.parse("2221-07-23T19:20:21"));
         assertThat(newRecord.getStatus()).isEqualTo(Portfolio.Status.IN_PROGRESS);
-    }
-
-    /* Added By Jeff: Work in Progress 10/10/21
-    *
-    *   @Chris: Need help to iterate through the top ten coins JSON String
-    *           - Be able to add our 6 prefined coins to prices
-    *           - return the prices HashMap
-    *
-    */
-    @Test
-    void canFetchRealPrices() throws IllegalTransactionException {
-        RealTradingEngineService realTradingService = new RealTradingEngineService();
-        realTradingService.fetchTopTenCoins();
     }
 }

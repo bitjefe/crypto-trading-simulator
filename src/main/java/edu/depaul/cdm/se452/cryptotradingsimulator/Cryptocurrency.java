@@ -8,5 +8,5 @@ import javax.persistence.*;
 @Entity
 public class Cryptocurrency {
     @Id
-    private long ticker;
+    private String ticker;
 }
