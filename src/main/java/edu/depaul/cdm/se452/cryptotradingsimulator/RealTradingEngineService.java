@@ -8,6 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import edu.depaul.cdm.se452.cryptotradingsimulator.dto.CoinMCResponse.CoinMCResponse;
+import edu.depaul.cdm.se452.cryptotradingsimulator.dto.CoinMCResponse.Datum;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,11 +24,34 @@ public class RealTradingEngineService implements TradingEngineService {
 
     @Override
     public Double fetchRemotePrice(String cryptoTicker) {
-        return getPrices().get(cryptoTicker);
+        return getPrices().get(cryptoTicker).quote.usd.price;
+    }
+
+    public String getName(String cryptoTicker) {
+        return getPrices().get(cryptoTicker).name;
     }
 
     @Override
-    public HashMap<String, Double> getPrices() {
+    public Double hourPriceChange(String cryptoTicker) {
+        return getPrices().get(cryptoTicker).quote.getUsd().getPercentChange1h();
+    }
+
+    @Override
+    public Double dayPriceChange(String cryptoTicker) {
+        return getPrices().get(cryptoTicker).quote.getUsd().getPercentChange24h();
+    }
+
+    @Override
+    public Double weekPriceChange(String ticker) {
+        return getPrices().get(ticker).quote.getUsd().getPercentChange7d();
+    }
+
+    @Override
+    public Double percentageOfMarket(String cryptoTicker) {
+        return getPrices().get(cryptoTicker).quote.getUsd().getMarketCapDominance();
+    }
+
+    public HashMap<String, Datum> getPrices() {
         if (AppCache.isCached(cacheKey, appCacheRepository)) {
             return parseResponse(AppCache.getCacheValue(cacheKey, appCacheRepository));
         }
@@ -37,7 +61,7 @@ public class RealTradingEngineService implements TradingEngineService {
         return fetchTopTenCoins();
     }
 
-    public HashMap<String, Double> fetchTopTenCoins() {
+    public HashMap<String, Datum> fetchTopTenCoins() {
         return parseResponse(this.callApi());
     }
 
@@ -66,8 +90,8 @@ public class RealTradingEngineService implements TradingEngineService {
         return null;
     }
 
-    private HashMap<String, Double> parseResponse(String apiResponse) {
-        HashMap<String, Double> prices = new HashMap<>();
+    private HashMap<String, Datum> parseResponse(String apiResponse) {
+        HashMap<String, Datum> prices = new HashMap<>();
 
         ObjectMapper mapper = new ObjectMapper();
         CoinMCResponse items = null;
@@ -79,7 +103,7 @@ public class RealTradingEngineService implements TradingEngineService {
         }
 
         items.data.stream().forEach(d -> {
-            prices.put(d.symbol, d.quote.usd.price);
+            prices.put(d.symbol, d);
         });
 
         return prices;

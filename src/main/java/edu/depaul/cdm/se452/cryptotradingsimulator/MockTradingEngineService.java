@@ -10,9 +10,33 @@ public class MockTradingEngineService implements TradingEngineService {
         return mockPrices.get(cryptoTicker);
     }
 
-    @Override
     public HashMap<String, Double> getPrices() {
         return mockPrices;
+    }
+
+    @Override
+    public String getName(String ticker) {
+        return "fake_name";
+    }
+
+    @Override
+    public Double hourPriceChange(String ticker) {
+        return 1.0;
+    }
+
+    @Override
+    public Double dayPriceChange(String ticker) {
+        return 2.0;
+    }
+
+    @Override
+    public Double weekPriceChange(String ticker) {
+        return 3.0;
+    }
+
+    @Override
+    public Double percentageOfMarket(String ticker) {
+        return 3.0;
     }
 
     public void setMockPrice(String cryptoTicker, Double mockPrice) {
