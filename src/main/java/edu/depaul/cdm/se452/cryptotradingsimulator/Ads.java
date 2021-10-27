@@ -18,5 +18,6 @@ public class Ads {
     private Date startDate;
     private Date endDate;
     private Double pricePerAd;
-    private Double adLimit;
+    private String message;
+    private String logo;
 }
