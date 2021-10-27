@@ -29,7 +29,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-   @Bean
+    @Bean
     public CommandLineRunner printLombokPortfolio() {
         log.info("--- printLombokPortfolio ---");
         return (args) -> {
@@ -39,7 +39,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-   @Bean
+    @Bean
     public CommandLineRunner printPortfolios(PortfolioRepository repository) {
         log.info("--- printPortfolios ---");
         return (args) -> {
@@ -54,17 +54,16 @@ public class CryptoTradingSimulatorApplication {
         log.info("--- userLogin ---");
         return (args) -> {
             UserAuthentication userAuth = new UserAuthentication();
-
-            if (userAuth.signIn(repository) == true) {
-                System.out.println("You just logged in, welcome!");
-            } else {
-                System.out.println("No account found. Please sign up below: ");
-                userAuth.signUp(repository);
-            }
-
-            // log.info(String.valueOf(repository.findAll()));
-
-            // log.info("---");
+            /*
+             * if (userAuth.signIn(repository) == true) {
+             * System.out.println("You just logged in, welcome!"); } else {
+             * System.out.println("No account found. Please sign up below: ");
+             * userAuth.signUp(repository); }
+             * 
+             * // log.info(String.valueOf(repository.findAll()));
+             * 
+             * // log.info("---");
+             */
         };
     }
 
@@ -101,7 +100,8 @@ public class CryptoTradingSimulatorApplication {
     }
 
     @Bean
-    public CommandLineRunner printTransactions(PortfolioRepository portfolioRepository, CryptoTransactionRepository transactionRepository, CryptocurrencyRepository cryptoRepo, EntityManager em) {
+    public CommandLineRunner printTransactions(PortfolioRepository portfolioRepository,
+            CryptoTransactionRepository transactionRepository, CryptocurrencyRepository cryptoRepo, EntityManager em) {
         log.info("--- printTransactions ---");
         MockTradingEngineService mockTradingEngine = new MockTradingEngineService();
         mockTradingEngine.setMockPrice("BTC", 1000.00);
@@ -118,8 +118,10 @@ public class CryptoTradingSimulatorApplication {
             log.info("---");
 
             log.info("--- User purchases 2 BTC and 3 ETH ---");
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, true, cryptoRepo);
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, true, cryptoRepo);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00,
+                    true, cryptoRepo);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00,
+                    true, cryptoRepo);
             newRecord = portfolioRepository.findById(newRecord.getId()).get();
             newRecord.fancyToString(log, mockTradingEngine);
             log.info("---");
@@ -131,8 +133,10 @@ public class CryptoTradingSimulatorApplication {
             log.info("---");
 
             log.info("--- User decides to sell their current holdings ---");
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00, false, cryptoRepo);
-            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00, false, cryptoRepo);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "BTC", 2.00,
+                    false, cryptoRepo);
+            createTransaction(newRecord, mockTradingEngine, transactionRepository, portfolioRepository, "ETH", 3.00,
+                    false, cryptoRepo);
             newRecord = portfolioRepository.findById(newRecord.getId()).get();
             newRecord.fancyToString(log, mockTradingEngine);
             log.info("---");
@@ -152,8 +156,9 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    private CryptoTransaction createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine, CryptoTransactionRepository ctr, PortfolioRepository pr,
-                                                String ticker, Double quantity, Boolean isPurchase, CryptocurrencyRepository cryptoRepo) {
+    private CryptoTransaction createTransaction(Portfolio newRecord, MockTradingEngineService mockTradingEngine,
+            CryptoTransactionRepository ctr, PortfolioRepository pr, String ticker, Double quantity, Boolean isPurchase,
+            CryptocurrencyRepository cryptoRepo) {
         CryptoTransaction transaction = new CryptoTransaction();
         transaction.setCryptocurrency(cryptoRepo.findById(ticker).get());
         transaction.setQuantity(quantity);
