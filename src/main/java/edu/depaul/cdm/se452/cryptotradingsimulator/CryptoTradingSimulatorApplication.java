@@ -147,7 +147,6 @@ public class CryptoTradingSimulatorApplication {
     public CommandLineRunner fetchTop10Coins(AppCacheRepository repo, CryptocurrencyRepository cryptoRepo) {
         log.info("--- fetchTop10Coins ---");
         return (args) -> {
-            log.info("Hello world123");
             RealTradingEngineService s = new RealTradingEngineService(repo);
             log.info("--- Recent Coin Prices ---");
             log.info(String.valueOf(cryptoRepo.findById("BTC")));

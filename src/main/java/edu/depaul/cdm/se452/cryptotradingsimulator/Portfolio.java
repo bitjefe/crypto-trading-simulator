@@ -25,6 +25,12 @@ public class Portfolio {
 
     private Double startingBalance;
 
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserAuthentication user;
+
     public enum Status {
         COMPLETE, IN_PROGRESS
     }
@@ -87,6 +93,17 @@ public class Portfolio {
         }
 
         return Status.IN_PROGRESS;
+    }
+
+    public String getFormattedStatus() {
+        switch (this.getStatus()) {
+            case COMPLETE:
+                return "Complete";
+            case IN_PROGRESS:
+                return "In-Progress";
+            default:
+                return "Unknown";
+        }
     }
 
     public void fancyToString(Logger log, TradingEngineService tradingService) {
