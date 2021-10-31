@@ -15,6 +15,8 @@
 
 .new-portfolio-button {
     margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 .view-portfolio label {
