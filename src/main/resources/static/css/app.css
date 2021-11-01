@@ -31,3 +31,7 @@
 .current-holdings-header-button {
     margin-left: auto;
 }
+
+.clickable {
+    cursor: pointer;
+}

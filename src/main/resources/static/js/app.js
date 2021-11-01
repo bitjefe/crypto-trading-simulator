@@ -8,10 +8,12 @@ function setTransactionValue(quantityElement, cryptoDropdown) {
   }
 }
 
-getCryptoDropdown().addEventListener('change', (e) => {
-  setTransactionValue(getQuantityElement(), getCryptoDropdown());
-})
-
-getQuantityElement().addEventListener('change', (e) => {
-  setTransactionValue(getQuantityElement(), getCryptoDropdown());
-})
+if (getCryptoDropdown()) {
+  getCryptoDropdown().addEventListener('change', (e) => {
+    setTransactionValue(getQuantityElement(), getCryptoDropdown());
+  })
+  
+  getQuantityElement().addEventListener('change', (e) => {
+    setTransactionValue(getQuantityElement(), getCryptoDropdown());
+  })
+}
