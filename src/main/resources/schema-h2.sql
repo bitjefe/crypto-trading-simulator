@@ -31,6 +31,7 @@ CREATE TABLE crypto_transaction
     cryptocurrency_ticker VARCHAR(6),
     quantity              DECIMAL(10, 5),
     price_per_coin    DECIMAL(10, 2),
+    trade_date    TIMESTAMP WITH TIME ZONE,
     is_purchase           BOOLEAN,
     FOREIGN KEY (cryptocurrency_ticker) REFERENCES cryptocurrency (ticker),
     FOREIGN KEY (portfolio_id) REFERENCES portfolio (id)

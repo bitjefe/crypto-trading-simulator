@@ -3,6 +3,7 @@ package edu.depaul.cdm.se452.cryptotradingsimulator;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -25,6 +26,8 @@ public class CryptoTransaction {
 
     private Boolean isPurchase;
 
+    private LocalDateTime tradeDate;
+
     public void process(TradingEngineService tradingEngine) throws IllegalTransactionException {
         Boolean isSale = !this.isPurchase;
         if (isSale) {
@@ -40,6 +43,14 @@ public class CryptoTransaction {
         if (!portfolio.isCryptoHoldingQuantityPositive(this.quantity, this.cryptocurrency.getTicker())) {
             throw new IllegalTransactionException("Cannot sell more Cryptocurrency than user owns!");
         }
+    }
+
+    public String getTransactionType() {
+        return this.isPurchase ? "Buy" : "Sell";
+    }
+
+    public Double getTransactionValue() {
+        return this.quantity * this.pricePerCoin;
     }
 
     public String getCryptocurrencyTicker() {

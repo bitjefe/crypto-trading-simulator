@@ -15,7 +15,7 @@ insert into cryptocurrency values ('BTC'),
                                   ('BCH'),
                                   ('DOGE');
 
-insert into crypto_transaction values (null, 1, 'BTC', 1.00, 5637.00, true);
+insert into crypto_transaction values (null, 1, 'BTC', 1.00, 5637.00, '2021-02-04 19:20:21-06:00', true);
 
 insert into admin_metric values (null, 'sign_up', null);
 insert into admin_metric values (null, 'sign_up', null);

@@ -45,6 +45,14 @@ public class PortfolioController {
         return "portfolios/add";
     }
 
+    @GetMapping(path="/{id}")
+    public String viewOne(@PathVariable("id") String portfolioId, Model model) {
+        TradingEngineService tradingService = new RealTradingEngineService(appCacheRepository);
+        model.addAttribute("portfolio", repo.findById(Long.parseLong(portfolioId)).get());
+        model.addAttribute("tradingEngineService", tradingService);
+        return "portfolios/view";
+    }
+
     @PostMapping
     public String savePortfolio(@ModelAttribute("portfolio") Portfolio portfolio, BindingResult bindingResult, @RequestBody MultiValueMap<String, String> formData) {
         String endDate = formData.get("endDate").get(0);
