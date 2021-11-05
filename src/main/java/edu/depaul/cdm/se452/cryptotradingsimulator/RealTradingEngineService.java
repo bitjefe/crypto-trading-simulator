@@ -71,7 +71,7 @@ public class RealTradingEngineService implements TradingEngineService {
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=10"))
+                .uri(URI.create("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=20"))
                 .GET()
                 .header("X-CMC_PRO_API_KEY", apiKey)
                 .build();

@@ -10,9 +10,12 @@ insert into portfolio values (null, 94363.00, 100000.00, '2021-02-03 19:20:21-06
 
 insert into cryptocurrency values ('BTC'),
                                   ('ETH'),
-                                  ('LTC'),
+                                  ('BNB'),
                                   ('ADA'),
-                                  ('BCH'),
+                                  ('USDT'),
+                                  ('XRP'),
+                                  ('SOL'),
+                                  ('USDC'),
                                   ('DOGE');
 
 insert into crypto_transaction values (null, 1, 'BTC', 1.00, 5637.00, '2021-02-04 19:20:21-06:00', true);

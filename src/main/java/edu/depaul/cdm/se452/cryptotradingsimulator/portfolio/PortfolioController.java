@@ -28,6 +28,9 @@ public class PortfolioController {
     @Autowired
     private UserAuthenticationRepository userAuthRepo;
 
+    @Autowired
+    private CryptocurrencyRepository cryptoRepo;
+
     private Long mockUserId = 1L;
 
     @GetMapping
@@ -51,6 +54,15 @@ public class PortfolioController {
         model.addAttribute("portfolio", repo.findById(Long.parseLong(portfolioId)).get());
         model.addAttribute("tradingEngineService", tradingService);
         return "portfolios/view";
+    }
+
+    @GetMapping(path="/{id}/tradingDashboard")
+    public String tradingDashboard(@PathVariable("id") String portfolioId, Model model) {
+        TradingEngineService tradingService = new RealTradingEngineService(appCacheRepository);
+        model.addAttribute("portfolio", repo.findById(Long.parseLong(portfolioId)).get());
+        model.addAttribute("tradingEngineService", tradingService);
+        model.addAttribute("coins", cryptoRepo.findAll());
+        return "portfolios/trading-buy-sell";
     }
 
     @PostMapping
