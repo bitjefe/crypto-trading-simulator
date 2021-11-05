@@ -7,8 +7,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="static/css/app.css" rel="stylesheet">
-    <script src="static/js/app.js"></script>
+    <link href="/static/css/app.css" rel="stylesheet">
+    <script src="/static/js/app.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -86,17 +86,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>XRP</td>
-                        <td>500</td>
-                        <td>$1.30</td>
-                        <td>$650.00</td>
-                    </tr>
-                    <tr>
-                        <td>DOGE</td>
-                        <td>9000</td>
-                        <td>$1.10</td>
-                        <td>$9900.00</td>
+                    <tr scope="row" th:each="holding : ${portfolio.getCurrentHoldings()}">
+                        <td th:text="${holding.key}"></td>
+                        <td th:text="${holding.value}"></td>
+                        <td th:text="${#numbers.formatCurrency(tradingEngineService.fetchRemotePrice(holding.key))}"></td>
+                        <td th:text="${#numbers.formatCurrency(holding.value * tradingEngineService.fetchRemotePrice(holding.key))}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -116,7 +110,7 @@
                     <tr scope="row" th:each="transaction : ${portfolio.getCryptoTransactions()}">
                         <td th:text="${transaction.getTransactionType()}"></td>
                         <td th:text="${transaction.getCryptocurrency().getTicker()}"></td>
-                        <td th:text="${#numbers.formatDecimal(transaction.getCryptocurrency().getPrice(tradingEngineService), 0, 'COMMA', 2, 'POINT')}"></td>
+                        <td th:text="${#numbers.formatDecimal(transaction.getPricePerCoin(), 0, 'COMMA', 2, 'POINT')}"></td>
                         <td th:text="${transaction.getQuantity()}"></td>
                         <td th:text="${#numbers.formatDecimal(transaction.getTransactionValue(), 0, 'COMMA', 2, 'POINT')}"></td>
                         <td th:text="${#temporals.format(transaction.getTradeDate(), 'dd/MMM/yyyy HH:mm')}"></td>
