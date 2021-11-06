@@ -78,30 +78,7 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 <h2>Available Coins</h2>
-                <table class="table">
-                    <thead>
-                    <tr class="portfolio-item">
-                        <th scope="col">Ticker</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">1h Change</th>
-                        <th scope="col">24h Change</th>
-                        <th scope="col">7d Change</th>
-                        <th scope="col">Market cap %</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr scope="row" th:each="coin : ${coins}">
-                        <td th:text="${coin.getTicker()}"></td>
-                        <td th:text="${coin.getName(tradingEngineService)}"></td>
-                        <td th:text="${#numbers.formatCurrency(coin.getPrice(tradingEngineService))}"></td>
-                        <td th:text="${#numbers.formatDecimal(coin.getPriceChange1h(tradingEngineService), 1, 2) + '%'}"></td>
-                        <td th:text="${#numbers.formatDecimal(coin.getPriceChange1d(tradingEngineService), 1, 2) + '%'}"></td>
-                        <td th:text="${#numbers.formatDecimal(coin.getPriceChange7d(tradingEngineService), 1, 2) + '%'}"></td>
-                        <td th:text="${#numbers.formatDecimal(coin.getMarketCapDominance(tradingEngineService), 1, 2) + '%'}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div th:replace="fragments/availableCryptoTable :: table"></div>
             </div>
         </div>
     </div>
