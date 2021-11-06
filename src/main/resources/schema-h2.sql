@@ -26,7 +26,7 @@ CREATE TABLE cryptocurrency
 
 CREATE TABLE crypto_transaction
 (
-    id                    INT AUTO_INCREMENT PRIMARY KEY,
+    id                    uuid DEFAULT random_uuid(),
     portfolio_id          INT,
     cryptocurrency_ticker VARCHAR(6),
     quantity              DECIMAL(10, 5),

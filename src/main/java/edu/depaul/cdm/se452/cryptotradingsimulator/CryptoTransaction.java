@@ -1,16 +1,21 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
 public class CryptoTransaction {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid",
+            strategy = "uuid")
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")

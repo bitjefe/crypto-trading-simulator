@@ -31,6 +31,9 @@ public class PortfolioController {
     @Autowired
     private CryptocurrencyRepository cryptoRepo;
 
+    @Autowired
+    private CryptoTransactionRepository cryptoTransactionRepository;
+
     private Long mockUserId = 1L;
 
     @GetMapping
@@ -50,6 +53,7 @@ public class PortfolioController {
 
     @GetMapping(path="/{id}")
     public String viewOne(@PathVariable("id") String portfolioId, Model model) {
+        System.out.println("cryptoTransactionRepository = " + cryptoTransactionRepository.findAll());
         TradingEngineService tradingService = new RealTradingEngineService(appCacheRepository);
         model.addAttribute("portfolio", repo.findById(Long.parseLong(portfolioId)).get());
         model.addAttribute("tradingEngineService", tradingService);
@@ -58,10 +62,13 @@ public class PortfolioController {
 
     @GetMapping(path="/{id}/tradingDashboard")
     public String tradingDashboard(@PathVariable("id") String portfolioId, Model model) {
+        Portfolio portfolio = repo.findById(Long.parseLong(portfolioId)).get();
+        CryptoTransaction cryptoTransaction = new CryptoTransaction();
         TradingEngineService tradingService = new RealTradingEngineService(appCacheRepository);
-        model.addAttribute("portfolio", repo.findById(Long.parseLong(portfolioId)).get());
+        model.addAttribute("portfolio", portfolio);
         model.addAttribute("tradingEngineService", tradingService);
         model.addAttribute("coins", cryptoRepo.findAll());
+        model.addAttribute("cryptoTransaction", cryptoTransaction);
         return "portfolios/trading-buy-sell";
     }
 
@@ -74,5 +81,30 @@ public class PortfolioController {
         portfolio.setUser(userAuthRepo.findById(mockUserId).get());
         repo.save(portfolio);
         return "redirect:/portfolio";
+    }
+
+    @PostMapping(path="{id}/transaction")
+    public String saveTransaction(@ModelAttribute("cryptoTransaction") CryptoTransaction cryptoTransaction, @PathVariable("id") String portfolioId,
+                                  BindingResult bindingResult, @RequestBody MultiValueMap<String, String> formData) {
+        String ticker = formData.get("ticker").get(0);
+        Portfolio p = repo.findById(Long.parseLong(portfolioId)).get();
+        Boolean isPurchase = formData.get("buy-radio").size() > 0;
+        TradingEngineService tradingService = new RealTradingEngineService(appCacheRepository);
+        Cryptocurrency c = cryptoRepo.findById(ticker).get();
+        cryptoTransaction.setCryptocurrency(c);
+        cryptoTransaction.setPricePerCoin(c.getPrice(tradingService));
+        cryptoTransaction.setIsPurchase(isPurchase);
+        cryptoTransaction.setTradeDate(LocalDateTime.now());
+        cryptoTransaction.setPortfolio(p);
+        System.out.println("p.fancyToString(); = " + p.getCryptoTransactions());
+        try {
+            cryptoTransaction.process(tradingService);
+        } catch (IllegalTransactionException e) {
+            e.printStackTrace();
+        }
+
+        cryptoTransactionRepository.save(cryptoTransaction);
+        repo.save(cryptoTransaction.getPortfolio());
+        return "redirect:/portfolio/" + portfolioId;
     }
 }

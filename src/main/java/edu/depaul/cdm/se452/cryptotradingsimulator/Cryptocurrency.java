@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 
 @Data
 @Entity
@@ -33,5 +34,11 @@ public class Cryptocurrency {
 
     public Double getMarketCapDominance(TradingEngineService tradingService) {
         return tradingService.percentageOfMarket(this.ticker);
+    }
+
+    public String getFormattedPrice(TradingEngineService tradingService) {
+        Double price = this.getPrice(tradingService);
+        DecimalFormat f = new DecimalFormat("##.00");
+        return String.format("%s - %s - $%s", this.getName(tradingService), this.getTicker(), f.format(price));
     }
 }

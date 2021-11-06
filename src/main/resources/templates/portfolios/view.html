@@ -72,9 +72,9 @@
             <div class="col-10">
                 <div class="current-holdings-header">
                     <h5>Current Holdings</h5>
-                    <button type="submit" class="btn btn-primary btn-lg current-holdings-header-button">
+                    <a th:href="@{/portfolio/{id}/tradingDashboard(id=${portfolio.id})}" class="btn btn-primary btn-lg current-holdings-header-button">
                         Buy / Sell
-                    </button>
+                    </a>
                 </div>
                 <table class="table table-hover">
                     <thead>
