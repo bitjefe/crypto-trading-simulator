@@ -34,6 +34,9 @@ public class PortfolioController {
     @Autowired
     private CryptoTransactionRepository cryptoTransactionRepository;
 
+    @Autowired
+    private AdminMetricRepository adminMetricRepository;
+
     private Long mockUserId = 1L;
 
     @GetMapping
@@ -88,7 +91,7 @@ public class PortfolioController {
                                   BindingResult bindingResult, @RequestBody MultiValueMap<String, String> formData) {
         String ticker = formData.get("ticker").get(0);
         Portfolio p = repo.findById(Long.parseLong(portfolioId)).get();
-        Boolean isPurchase = formData.get("buy-radio").size() > 0;
+        Boolean isPurchase = formData.get("trade-radio").get(0).equals("purchase");
         TradingEngineService tradingService = new RealTradingEngineService(appCacheRepository);
         Cryptocurrency c = cryptoRepo.findById(ticker).get();
         cryptoTransaction.setCryptocurrency(c);
@@ -102,6 +105,11 @@ public class PortfolioController {
         } catch (IllegalTransactionException e) {
             e.printStackTrace();
         }
+
+        AdminMetric m = new AdminMetric();
+        m.setName("trade_made");
+        m.setCreatedAt(LocalDateTime.now());
+        adminMetricRepository.save(m);
 
         cryptoTransactionRepository.save(cryptoTransaction);
         repo.save(cryptoTransaction.getPortfolio());

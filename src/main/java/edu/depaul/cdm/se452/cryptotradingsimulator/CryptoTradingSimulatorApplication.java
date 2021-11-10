@@ -19,7 +19,7 @@ public class CryptoTradingSimulatorApplication {
     @Value("${app.greeting}")
     private String greeting;
 
-    @Bean
+//    @Bean
     public CommandLineRunner printEnvironmentVariable() {
         log.info("--- printEnvironmentVariable ---");
         return (args) -> {
@@ -29,7 +29,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner printLombokPortfolio() {
         log.info("--- printLombokPortfolio ---");
         return (args) -> {
@@ -39,7 +39,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner printPortfolios(PortfolioRepository repository) {
         log.info("--- printPortfolios ---");
         return (args) -> {
@@ -49,7 +49,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner userLogin(UserAuthenticationRepository repository) {
         log.info("--- userLogin ---");
         return (args) -> {
@@ -85,7 +85,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner printTopPortfolios(TopPortfoliosRepository topPortfoliosRep,
             PortfolioRepository portfoliorep) {
         log.info("--- portofoliosRanking ---");
@@ -99,7 +99,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner printTransactions(PortfolioRepository portfolioRepository,
             CryptoTransactionRepository transactionRepository, CryptocurrencyRepository cryptoRepo, EntityManager em) {
         log.info("--- printTransactions ---");
@@ -143,7 +143,7 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner fetchTop10Coins(AppCacheRepository repo, CryptocurrencyRepository cryptoRepo) {
         log.info("--- fetchTop10Coins ---");
         return (args) -> {

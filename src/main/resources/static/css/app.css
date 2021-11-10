@@ -35,3 +35,11 @@
 .clickable {
     cursor: pointer;
 }
+
+.admin-chart {
+    margin: 0 auto;
+}
+
+.admin-controls {
+    margin-left: auto;
+}
