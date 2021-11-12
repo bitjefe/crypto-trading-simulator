@@ -2,9 +2,11 @@ package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -12,10 +14,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 public class CryptoTransaction {
     @Id
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid",
-            strategy = "uuid")
-    private String id;
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
+    @Column(length = 36, nullable = false, updatable = false)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
