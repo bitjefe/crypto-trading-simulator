@@ -45,7 +45,7 @@
                 </form>
             </div>
             <div class="col-10">
-                <form class="mb-4" th:object="${cryptoTransaction}" action="#" th:action="@{/portfolio/{id}/transaction(id=${portfolio.id})}" method="post">
+                <form class="mb-4" th:object="${cryptoTransaction}" action="#" th:action="@{/portfolio/transaction?portfolioId={portfolioId}(portfolioId=${portfolio.id})}" method="post">
                     <div class="mb-3">
                         <label for="cryptocurrency-dropdown" class="form-label">Crypcurrency</label>
                         <select class="form-select" id="cryptocurrency-dropdown" name="ticker">
@@ -58,6 +58,7 @@
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Quantity</label>
                         <input type="number" class="form-control" id="quantity" placeholder="10.50" step="0.01" th:field="*{quantity}">
+                        <span class="badge-warning" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Airport City Error</span>
                     </div>
                     <div class="mb-3">
                         <label for="transaction-value" class="form-label">Transaction Value</label>
