@@ -1,7 +1,10 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator.userAuth;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import edu.depaul.cdm.se452.cryptotradingsimulator.AdminMetric;
+import edu.depaul.cdm.se452.cryptotradingsimulator.AdminMetricRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,9 @@ public class userAuthController {
     @Autowired
     private UserAuthenticationRepository repository;
 
+    @Autowired
+    private AdminMetricRepository adminRepo;
+
     @GetMapping("")
     public String viewHomePage() {
         return "userAuths/index";
@@ -39,6 +45,11 @@ public class userAuthController {
         String encodedPassword = encoder.encode(userAuth.getPassword());
         userAuth.setPassword(encodedPassword);
         repository.save(userAuth);
+
+        AdminMetric m = new AdminMetric();
+        m.setName("sign_up");
+        m.setCreatedAt(LocalDateTime.now());
+        adminRepo.save(m);
         // System.out.println(repository.findAll());
 
         return "userAuths/register_success";
