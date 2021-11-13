@@ -31,7 +31,7 @@ CREATE TABLE user_auth_sql
 (
     id                    SERIAL PRIMARY KEY,
     username              VARCHAR(40),
-    password              VARCHAR(40)
+    password              VARCHAR(65)
 );
 
 CREATE TABLE portfolios_ranking

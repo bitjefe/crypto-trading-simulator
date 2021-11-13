@@ -1,6 +1,6 @@
-insert into user_auth_sql values (1 ,'Chris', '1234');
-insert into user_auth_sql values (2 ,'Jeff', '1234');
-insert into user_auth_sql values (null ,'Mohammad', '1234');
+insert into user_auth_sql values (1 ,'Chris', '$2a$10$VG2soMyVWF8B2Iux3eusF.qtjTMDgJzTz9XxR665wjf6F1Ea0PMMm');
+insert into user_auth_sql values (2 ,'Jeff', '$2a$10$VG2soMyVWF8B2Iux3eusF.qtjTMDgJzTz9XxR665wjf6F1Ea0PMMm');
+insert into user_auth_sql values (3 ,'Mohammad', '$2a$10$VG2soMyVWF8B2Iux3eusF.qtjTMDgJzTz9XxR665wjf6F1Ea0PMMm');
 
 insert into portfolio values (null, 94363.00, 100000.00, '2021-02-03 19:20:21-06:00', '2021-02-04 19:20:21-06:00', 'Only Bitcoin', 1),
                              (null, 100000.00, 100000.00, '2021-04-13 19:20:21-06:00', '2021-04-14 19:20:21-06:00', 'High Risk Coins', 1),

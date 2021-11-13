@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,37 +43,26 @@
 
 <link href="signin.css" rel="stylesheet">
 </head>
-<body class="text-center">
+<body>  
+<div id="container">  
+    <h2>Login page</h2>  
+    <form th:action="@{/login}" method="post">  
+        <label for="username">Username</label>  
+        <input type="text" id="username" name="username" autofocus="autofocus" />  
+        <label for="password">Password</label>  
+        <input type="password" id="password" name="password" />  
+        <input id="submit" type="submit" value="Log in" />  
+    </form>  
+    <p th:if="${loginError}" class="error">Wrong user or password</p>  
 
-<main class="form-signin">
-    <form>
-      <h1 class="h3 mb-3 fw-normal">Login Here</h1>
-      <div class="row">
-        <div class="col-md-4"></div>
-      <div class="form-floating col-md-4 mb-3">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-        <label for="floatingInput">Email address</label>
-      </div>
-      <div class="col-md-4"></div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-4"></div>
-        <div class="form-floating col-md-4 mb-3">
-          <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-          <label for="floatingPassword">Password</label>
-        </div>
-        <div class="col-md-4"></div>
-      </div>
-
-      <div class="col">
-        
-        <button type="button" class="btn btn-primary btn-lg">Sign Up</button>
-        <button type="button" class="btn btn-secondary btn-lg">Sign in</button>
-    </div>
-      
-      </form>
-</main>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" ></script> 
-  </body>
+</div>  
+</body>  
 </html>
+
+
+
+
+
+
+

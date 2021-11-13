@@ -4,7 +4,7 @@ CREATE TABLE user_auth_sql
 (
     id                    INT AUTO_INCREMENT PRIMARY KEY,
     username              VARCHAR(40),
-    password              VARCHAR(40)
+    password              VARCHAR(65)
 );
 
 CREATE TABLE portfolio
