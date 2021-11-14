@@ -50,8 +50,8 @@ public class webSecurityConfig extends WebSecurityConfigurerAdapter {
          */
 
         http.authorizeRequests().antMatchers("/home/list_users").authenticated().anyRequest().permitAll().and()
-                .formLogin().usernameParameter("username").defaultSuccessUrl("/home/list_users").permitAll().and()
-                .logout().logoutSuccessUrl("/home").permitAll();
+                .formLogin().usernameParameter("username").defaultSuccessUrl("/portfolio").permitAll().and().logout()
+                .logoutSuccessUrl("/home").permitAll();
 
         /*
          * http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
