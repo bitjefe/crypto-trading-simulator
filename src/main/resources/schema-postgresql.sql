@@ -56,3 +56,14 @@ CREATE TABLE admin_metric
     name       varchar(40),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+create table users_authority
+(
+    authority_id int,
+    user_id      int
+);
+
+create table authority (
+                           id SERIAL PRIMARY KEY,
+                           name varchar(15)
+);

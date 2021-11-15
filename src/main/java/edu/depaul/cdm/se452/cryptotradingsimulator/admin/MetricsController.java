@@ -34,19 +34,12 @@ public class MetricsController {
     private Long mockUserId = 1L;
 
     private Date daysAgo(Long days) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm-06:00");
         return new Date(System.currentTimeMillis() - days * 24 * 3600 * 1000);
     }
 
     private String toIso(Date d) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm-06:00");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
         return df.format(d);
-    }
-
-    private Date parseIsoDate(String isoDate) {
-        TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(isoDate);
-        Instant i = Instant.from(ta);
-        return Date.from(i);
     }
 
     @GetMapping()
