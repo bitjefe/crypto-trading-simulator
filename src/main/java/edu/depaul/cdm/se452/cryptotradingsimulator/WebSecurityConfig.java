@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-public class webSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
@@ -49,14 +49,20 @@ public class webSecurityConfig extends WebSecurityConfigurerAdapter {
          * loginPage("/auth-sign-in.html") .permitAll();
          */
 
-        http.authorizeRequests().antMatchers("/home/list_users").authenticated().anyRequest().permitAll().and()
-                .formLogin().usernameParameter("username").defaultSuccessUrl("/portfolio").permitAll().and().logout()
-                .logoutSuccessUrl("/home").permitAll();
-
-        /*
-         * http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
-         */
-
+        http.authorizeRequests()
+                .antMatchers("/portfolio/**", "/coins/**")
+                .authenticated()
+                .antMatchers("/admin/**")
+                .hasRole("ADMIN")
+                .anyRequest()
+                .permitAll()
+                .and()
+                .formLogin()
+                .usernameParameter("username")
+                .defaultSuccessUrl("/portfolio")
+                .permitAll()
+                .and()
+                .logout().logoutSuccessUrl("/home").permitAll();
     }
 
     @Override

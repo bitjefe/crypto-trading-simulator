@@ -20,7 +20,7 @@ import edu.depaul.cdm.se452.cryptotradingsimulator.UserAuthenticationRepository;
 
 @Controller
 @RequestMapping("/home")
-public class userAuthController {
+public class UserAuthController {
 
     @Autowired
     private UserAuthenticationRepository repository;

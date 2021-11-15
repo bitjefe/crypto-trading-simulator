@@ -71,7 +71,6 @@ public class PortfolioController {
     public String tradingDashboard(@PathVariable("id") String portfolioId, Model model) {
         Portfolio portfolio = repo.findById(Long.parseLong(portfolioId)).get();
         CryptoTransaction cryptoTransaction = new CryptoTransaction();
-        cryptoTransaction.setId(UUID.randomUUID());
         TradingEngineService tradingService = new RealTradingEngineService(appCacheRepository);
         model.addAttribute("portfolio", portfolio);
         model.addAttribute("tradingEngineService", tradingService);

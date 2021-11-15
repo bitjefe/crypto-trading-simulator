@@ -24,3 +24,15 @@ insert into admin_metric values (null, 'sign_up', '2021-11-05 19:20:21-06:00');
 insert into admin_metric values (null, 'sign_up', '2021-11-05 19:20:21-06:00');
 insert into admin_metric values (null, 'sign_in', '2021-11-05 19:20:21-06:00');
 insert into admin_metric values (null, 'sign_in', '2021-10-13 19:20:21-06:00');
+
+INSERT INTO authority(name, id) VALUES ('ROLE_ADMIN', 1);
+INSERT INTO authority(name, id) VALUES ('ROLE_USER', 2);
+
+INSERT INTO users_authority(authority_id, user_id) VALUES (1, 1);
+INSERT INTO users_authority(authority_id, user_id) VALUES (2, 1);
+
+INSERT INTO users_authority(authority_id, user_id) VALUES (1, 2);
+INSERT INTO users_authority(authority_id, user_id) VALUES (2, 2);
+
+INSERT INTO users_authority(authority_id, user_id) VALUES (1, 3);
+INSERT INTO users_authority(authority_id, user_id) VALUES (2, 3);

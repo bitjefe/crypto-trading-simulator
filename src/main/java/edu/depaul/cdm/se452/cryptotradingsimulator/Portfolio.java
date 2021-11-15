@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -38,6 +39,10 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio", fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<CryptoTransaction> cryptoTransactions;
+
+    public List<CryptoTransaction> getSortedCryptoTransactions() {
+        return this.cryptoTransactions.stream().sorted((o1, o2) -> o2.getTradeDate().compareTo(o1.getTradeDate())).collect(Collectors.toList());
+    }
 
     public void adjustBalance(Double transactionPrice) throws IllegalTransactionException {
         Double newBalance = this.balance + transactionPrice;

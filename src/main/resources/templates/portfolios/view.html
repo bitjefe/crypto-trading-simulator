@@ -80,7 +80,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr scope="row" th:each="transaction : ${portfolio.getCryptoTransactions()}">
+                    <tr scope="row" th:each="transaction : ${portfolio.getSortedCryptoTransactions()}">
                         <td th:text="${transaction.getTransactionType()}"></td>
                         <td th:text="${transaction.getCryptocurrency().getTicker()}"></td>
                         <td th:text="${#numbers.formatDecimal(transaction.getPricePerCoin(), 0, 'COMMA', 2, 'POINT')}"></td>
