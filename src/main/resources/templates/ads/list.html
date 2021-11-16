@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/navbar :: common-header">
+</head>
+<body>
+<div th:replace="fragments/navbar :: header"></div>
+<div class="app">
+    <div class="portfolio-header">
+        <h1>Ads List</h1>
+        <a href="/ads/create" type="button" class="btn btn-primary new-portfolio-button" role="button">New Ad</a>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr class="portfolio-item">
+            <th scope="col">Company</th>
+            <th scope="col">message</th>
+            <th scope="col">Price / Ad</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr scope="row" th:each="ad : ${ads}">
+                <td th:text="${ad.companyId}"></td>
+                <td th:text="${ad.message}"></td>
+                <td th:text="${ad.pricePerAd}"></td>
+                <td th:text="${ad.startDate}"></td>
+                <td th:text="${ad.endDate}"></td>
+                <td>Live</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="/static/js/app.js"></script>
+</body>
+</html>
