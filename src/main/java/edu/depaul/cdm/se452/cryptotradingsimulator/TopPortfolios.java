@@ -1,24 +1,18 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import java.util.ArrayList;
-
 import java.util.Collections;
-
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "portfolios_ranking")
 public class TopPortfolios implements Comparable<TopPortfolios> {
-
-    // private static final TradingEngineService TradingEngineService = null;
 
     private String name;
 
@@ -27,10 +21,6 @@ public class TopPortfolios implements Comparable<TopPortfolios> {
     @Id
     @Column
     private Double score;
-    /*
-     * public TopPortfolios(Double profitLoss, long id) { this.score = profitLoss;
-     * this.id = id; }
-     */
 
     public void rankPortfolios(TopPortfoliosRepository topPortfoliosRep, PortfolioRepository portfoliorep,
             AppCacheRepository appCacheRepository) {
@@ -48,19 +38,18 @@ public class TopPortfolios implements Comparable<TopPortfolios> {
             temp.setName(portfolio.getName());
             topPortfolioList.add(temp);
         });
-        // Collections.reverseOrder(portfolioHashMap);
+
         Collections.sort(topPortfolioList);
         Collections.reverse(topPortfolioList);
         System.out.println(topPortfolioList);
         for (TopPortfolios pf : topPortfolioList) {
             topPortfoliosRep.save(pf);
         }
-        // System.out.println(topPortfoliosRep);
+
     }
 
     @Override
     public int compareTo(TopPortfolios s) {
-        // TODO Auto-generated method stub
         return score.compareTo(s.getScore());
     }
 

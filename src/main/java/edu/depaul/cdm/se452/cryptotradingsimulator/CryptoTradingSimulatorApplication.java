@@ -49,31 +49,6 @@ public class CryptoTradingSimulatorApplication {
         };
     }
 
-    // @Bean
-    public CommandLineRunner userLogin(UserAuthenticationRepository repository) {
-        log.info("--- userLogin ---");
-        return (args) -> {
-            UserAuthentication userAuth = new UserAuthentication();
-            /*
-             * if (userAuth.signIn(repository) == true) {
-             * System.out.println("You just logged in, welcome!"); } else {
-             * System.out.println("No account found. Please sign up below: ");
-             * userAuth.signUp(repository); }
-             * 
-             * // log.info(String.valueOf(repository.findAll()));
-             * 
-             * // log.info("---");
-             */
-            // log.info(String.valueOf(repository.findAll()));
-            // System.out.println(repository.findAll());
-            // String username = "Mohammad";
-
-            // userAuth = repository.findByUsername(username);
-
-            // System.out.println(repository.findByUsername("Mohammad"));
-        };
-    }
-
     public CommandLineRunner printCacheItems(AppCacheRepository repository) {
         return (args) -> {
             log.info("--- printCacheItems ---");
@@ -89,20 +64,6 @@ public class CryptoTradingSimulatorApplication {
             log.info("Cache hit: {}", AppCache.isCached(m.getCacheKey(), repository));
             log.info("Cache value: {}", AppCache.getCacheValue(m.getCacheKey(), repository));
             log.info("---");
-        };
-    }
-
-    // @Bean
-    public CommandLineRunner printTopPortfolios(TopPortfoliosRepository topPortfoliosRep,
-            PortfolioRepository portfoliorep) {
-        log.info("--- portofoliosRanking ---");
-        return (args) -> {
-            // System.out.println(portfoliorep.findById(1L));
-            // TopPortfolios topPortf = new TopPortfolios();
-            // topPortf.rankPortfolios(topPortfoliosRep, portfoliorep);
-
-            // log.info(String.valueOf(topPortfoliosRep.findAll()));
-
         };
     }
 

@@ -1,15 +1,11 @@
 package edu.depaul.cdm.se452.cryptotradingsimulator;
 
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.persistence.*;
-
 import edu.depaul.cdm.se452.cryptotradingsimulator.userAuth.Authority;
 import lombok.Data;
-
 import static edu.depaul.cdm.se452.cryptotradingsimulator.userAuth.AuthorityType.ROLE_ADMIN;
 
 @Data
