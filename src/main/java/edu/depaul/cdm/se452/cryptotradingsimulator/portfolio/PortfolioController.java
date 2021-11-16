@@ -65,7 +65,7 @@ public class PortfolioController {
     @GetMapping(path = "/leaderboard")
     public String leaderboard(Model model) {
         TopPortfolios topPortfolios = new TopPortfolios();
-        topPortfolios.rankPortfolios(topPortfoliosRepo, repo);
+        topPortfolios.rankPortfolios(topPortfoliosRepo, repo, appCacheRepository);
         List<TopPortfolios> listTopPortfolios = topPortfoliosRepo.findAll();
         model.addAttribute("listTopPortfolios", listTopPortfolios);
 
