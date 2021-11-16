@@ -47,7 +47,8 @@ CREATE TABLE user_auth_sql
 CREATE TABLE portfolios_ranking
 (
     score                 VARCHAR(40) PRIMARY KEY,
-    id                    INT
+    id                    INT,
+    name                  VARCHAR2(100)
 );
 
 CREATE TABLE admin_metric

@@ -98,10 +98,10 @@ public class CryptoTradingSimulatorApplication {
         log.info("--- portofoliosRanking ---");
         return (args) -> {
             // System.out.println(portfoliorep.findById(1L));
-            TopPortfolios topPortf = new TopPortfolios();
-            topPortf.rankPortfolios(topPortfoliosRep, portfoliorep);
+            // TopPortfolios topPortf = new TopPortfolios();
+            // topPortf.rankPortfolios(topPortfoliosRep, portfoliorep);
 
-            log.info(String.valueOf(topPortfoliosRep.findAll()));
+            // log.info(String.valueOf(topPortfoliosRep.findAll()));
 
         };
     }

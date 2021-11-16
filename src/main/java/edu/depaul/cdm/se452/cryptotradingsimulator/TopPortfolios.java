@@ -18,6 +18,8 @@ import lombok.Data;
 @Table(name = "portfolios_ranking")
 public class TopPortfolios implements Comparable<TopPortfolios> {
 
+    private String name;
+
     private long id;
 
     @Id
@@ -33,11 +35,12 @@ public class TopPortfolios implements Comparable<TopPortfolios> {
         List<TopPortfolios> topPortfolioList = new ArrayList<>();
 
         portfoliorep.findAll().forEach((portfolio) -> {
-            Double profitLoss = portfolio.getBalance() - 100000.0;
+            Double profitLoss = portfolio.getBalance() - portfolio.getStartingBalance();
             // portfolioHashMap.put(profitLoss, portfolio.getId());
             TopPortfolios temp = new TopPortfolios();
             temp.setScore(profitLoss);
             temp.setId(portfolio.getId());
+            temp.setName(portfolio.getName());
             topPortfolioList.add(temp);
         });
         // Collections.reverseOrder(portfolioHashMap);

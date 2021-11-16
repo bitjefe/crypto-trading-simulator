@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -23,6 +24,9 @@ public class PortfolioController {
 
     @Autowired
     private PortfolioRepository repo;
+
+    @Autowired
+    private TopPortfoliosRepository topPortfoliosRepo;
 
     @Autowired
     private AppCacheRepository appCacheRepository;
@@ -58,6 +62,16 @@ public class PortfolioController {
         return "portfolios/add";
     }
 
+    @GetMapping(path = "/leaderboard")
+    public String leaderboard(Model model) {
+        TopPortfolios topPortfolios = new TopPortfolios();
+        topPortfolios.rankPortfolios(topPortfoliosRepo, repo);
+        List<TopPortfolios> listTopPortfolios = topPortfoliosRepo.findAll();
+        model.addAttribute("listTopPortfolios", listTopPortfolios);
+
+        return "portfolios/daily-leaderboard";
+    }
+
     @GetMapping(path = "/{id}")
     public String viewOne(@PathVariable("id") String portfolioId, Model model) {
         System.out.println("cryptoTransactionRepository = " + cryptoTransactionRepository.findAll());
@@ -81,7 +95,7 @@ public class PortfolioController {
 
     @PostMapping
     public String savePortfolio(HttpServletRequest request, @ModelAttribute("portfolio") Portfolio portfolio,
-                                BindingResult bindingResult, @RequestBody MultiValueMap<String, String> formData) {
+            BindingResult bindingResult, @RequestBody MultiValueMap<String, String> formData) {
         String endDate = formData.get("endDate").get(0);
         portfolio.setStartDate(LocalDateTime.now());
         portfolio.setEndDate(LocalDate.parse(endDate).atStartOfDay());
@@ -92,8 +106,9 @@ public class PortfolioController {
     }
 
     @PostMapping(path = "transaction")
-    public String saveTransaction(@ModelAttribute("cryptoTransaction") CryptoTransaction cryptoTransaction, @RequestParam(required = false) String portfolioId,
-                                  BindingResult bindingResult, @RequestBody MultiValueMap<String, String> formData) throws IllegalTransactionException {
+    public String saveTransaction(@ModelAttribute("cryptoTransaction") CryptoTransaction cryptoTransaction,
+            @RequestParam(required = false) String portfolioId, BindingResult bindingResult,
+            @RequestBody MultiValueMap<String, String> formData) throws IllegalTransactionException {
         String ticker = formData.get("ticker").get(0);
         Portfolio p = repo.findById(Long.parseLong(portfolioId)).get();
         Boolean isPurchase = formData.get("trade-radio").get(0).equals("purchase");
