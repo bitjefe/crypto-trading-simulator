@@ -4,7 +4,7 @@ CREATE TABLE user_auth_sql
 (
     id                    SERIAL PRIMARY KEY,
     username              VARCHAR(40),
-    password              VARCHAR(40)
+    password              VARCHAR(60)
 );
 
 CREATE TABLE portfolio
@@ -37,18 +37,12 @@ CREATE TABLE crypto_transaction
     FOREIGN KEY (portfolio_id) REFERENCES portfolio (id)
 );
 
-CREATE TABLE user_auth_sql
-(
-    id                    SERIAL PRIMARY KEY,
-    username              VARCHAR(40),
-    password              VARCHAR(65)
-);
 
 CREATE TABLE portfolios_ranking
 (
-    score                 VARCHAR(40) PRIMARY KEY,
+    score                 DECIMAL(10, 2) PRIMARY KEY,
     id                    INT,
-    name                  VARCHAR2(100)
+    name                  VARCHAR(100)
 );
 
 CREATE TABLE admin_metric

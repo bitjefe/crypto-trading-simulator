@@ -39,7 +39,7 @@ CREATE TABLE crypto_transaction
 
 CREATE TABLE portfolios_ranking
 (
-    score                 VARCHAR(40) PRIMARY KEY,
+    score                 DECIMAL(10, 2) PRIMARY KEY,
     id                    INT,
     name                  VARCHAR2(100)
 );
