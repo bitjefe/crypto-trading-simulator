@@ -21,27 +21,6 @@ public class CryptoTradingSimulatorApplication {
     @Value("${app.greeting}")
     private String greeting;
 
-    @Bean
-    public CommandLineRunner insertInitialAdData(AdsRepository repository) {
-        log.info("Creating initial noSql Ad entry");
-        return (args) -> {
-            Ads adObj = new Ads();
-            if (repository.findAll().size() == 0) {
-                adObj.setId(LocalDateTime.now().toString());
-                adObj.setCompanyId("Robinhood");
-                adObj.setStartDate("2021-11-16");
-                adObj.setEndDate("2021-12-26");
-                adObj.setPricePerAd(100.00);
-                adObj.setMessage("Buy real crypto on Robinhood!");
-                adObj.setLogo("RH");
-                adObj.setCreatedAt(LocalDateTime.now());
-                repository.save(adObj);
-            }
-            log.info(repository.findAll().toString());
-            log.info("--- END insert initial ad data ---");
-        };
-    }
-
     // @Bean
     public CommandLineRunner printEnvironmentVariable() {
         log.info("--- printEnvironmentVariable ---");
