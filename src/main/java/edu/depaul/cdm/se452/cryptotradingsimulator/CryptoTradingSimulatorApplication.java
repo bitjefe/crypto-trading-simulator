@@ -9,6 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import edu.depaul.cdm.se452.cryptotradingsimulator.userInfo.UserInfo;
+import edu.depaul.cdm.se452.cryptotradingsimulator.userInfo.UserInfoRepository;
+
 import javax.persistence.EntityManager;
 
 import java.time.LocalDateTime;
@@ -21,13 +24,19 @@ public class CryptoTradingSimulatorApplication {
     @Value("${app.greeting}")
     private String greeting;
 
-    // @Bean
-    public CommandLineRunner printEnvironmentVariable() {
-        log.info("--- printEnvironmentVariable ---");
+    @Bean
+    public CommandLineRunner addUserInfo(UserInfoRepository repository) {
+        log.info("Creating initial noSql user info entry for user 2");
         return (args) -> {
-            log.info("Hello world");
-            log.info(greeting);
-            log.info("---");
+            if (repository.findByUserId(2L).size() == 0) {
+                UserInfo userInfoObj = new UserInfo();
+                userInfoObj.setUserId(2L);
+                userInfoObj.setUserName("Jeff");
+                userInfoObj.setDateOfBirth("12-25-2021");
+                userInfoObj.setPhone("318-331-3161");
+                repository.save(userInfoObj);
+            }
+            log.info("--- END insert initial user info data ---");
         };
     }
 

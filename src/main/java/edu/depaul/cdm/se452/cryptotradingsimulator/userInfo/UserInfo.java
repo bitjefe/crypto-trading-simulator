@@ -1,4 +1,4 @@
-package edu.depaul.cdm.se452.cryptotradingsimulator;
+package edu.depaul.cdm.se452.cryptotradingsimulator.userInfo;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Document(collection = "users")
 public class UserInfo {
     @Id
-    private String id;
-    private String name;
+    private Long userId;
+    private String userName;
     private String dateOfBirth;
-    private String Email;
+    private String phone;
 }
