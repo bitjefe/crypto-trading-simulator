@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests().antMatchers("/portfolio/**", "/coins/**").authenticated().antMatchers("/admin/**", "/ads/**")
+        http.authorizeRequests().antMatchers("/portfolio/**", "/coins/**", "/userInfo/**").authenticated().antMatchers("/admin/**", "/ads/**")
                 .hasRole("ADMIN").anyRequest().permitAll().and().formLogin().usernameParameter("username")
                 .defaultSuccessUrl("/portfolio").permitAll().and().logout().logoutSuccessUrl("/home").permitAll();
     }
