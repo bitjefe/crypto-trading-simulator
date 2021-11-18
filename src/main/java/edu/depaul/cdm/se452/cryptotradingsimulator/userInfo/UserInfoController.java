@@ -46,9 +46,31 @@ public class UserInfoController {
 
     @GetMapping("")
     public String showAll(Model model, HttpServletRequest request) {
-        Iterable<UserInfo> user = userInfoRepo.findByUserId(mockUserId);
+        UserInfo user = userInfoRepo.findByUserId(mockUserId);
         model.addAttribute("userInfo", user);
         return "userInfo/profile";
     }
 
+    @GetMapping("/update")
+    public String update(Model model, HttpServletRequest request) {
+        UserInfo user = userInfoRepo.findByUserId(mockUserId);
+        System.out.println(user);
+        model.addAttribute("userInfo", user);
+        return "userInfo/update";
+    } 
+
+    
+    @PostMapping
+    public String saveUserInfo(HttpServletRequest request, @ModelAttribute("userInfo") UserInfo newUserInfo, BindingResult bindingResult, @RequestBody MultiValueMap<String, String> formData) {
+        String userName = formData.get("userName").get(0);
+        String dateOfBirth = formData.get("dateOfBirth").get(0);
+        String phone = formData.get("phone").get(0);
+
+        UserInfo user = userInfoRepo.findByUserId(mockUserId);
+        user.setUserName(userName);
+        user.setDateOfBirth(dateOfBirth);
+        user.setPhone(phone);
+        userInfoRepo.save(user);
+        return "redirect:/userInfo";
+    }
 }

@@ -5,5 +5,5 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserInfoRepository extends MongoRepository<UserInfo, String> {
-    List<UserInfo> findByUserId(Long userId);
+    UserInfo findByUserId(Long userId);
 }
