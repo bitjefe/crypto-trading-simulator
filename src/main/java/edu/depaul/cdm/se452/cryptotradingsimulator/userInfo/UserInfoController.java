@@ -46,15 +46,14 @@ public class UserInfoController {
 
     @GetMapping("")
     public String showAll(Model model, HttpServletRequest request) {
-        UserInfo user = userInfoRepo.findByUserId(mockUserId);
-        model.addAttribute("userInfo", user);
+        Iterable<UserInfo> users = userInfoRepo.findAll();
+        model.addAttribute("userInfo", users);
         return "userInfo/profile";
     }
 
     @GetMapping("/update")
     public String update(Model model, HttpServletRequest request) {
         UserInfo user = userInfoRepo.findByUserId(mockUserId);
-        System.out.println(user);
         model.addAttribute("userInfo", user);
         return "userInfo/update";
     } 
